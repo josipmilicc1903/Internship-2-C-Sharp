@@ -108,6 +108,12 @@ namespace Internship_2_C_Sharp
 
 
 
+
+
+
+
+
+
             void ListAllMembersSorted()
             {
                 List<(int id,string firstName, string lastName, int borrowCount)> memberList = new List<(int id,string firstName, string lastName, int borrowCount)>();
@@ -176,11 +182,13 @@ namespace Internship_2_C_Sharp
 
 
 
+
             void OverviewMembers()
             {
                 while (true)
                 {
                     string template = """
+
 
                         PREGLED ČLANOVA
 
@@ -224,7 +232,96 @@ namespace Internship_2_C_Sharp
                 }
             }
 
-            
+
+
+
+
+
+            void DeleteMemberById()
+            {
+                Console.WriteLine("\n");
+                Console.Write("Unesi Id korisnika kojeg želis izbrisati: ");
+                string input=Console.ReadLine();
+                int selectedId;
+                
+                if(int.TryParse(input,out selectedId)){}
+                else
+                {
+                    Console.WriteLine("Kriv unos, trebaš unijeti broj");
+                    Console.WriteLine("\n");
+                    return;
+                }
+
+                if (!members.ContainsKey(selectedId))
+                {
+                    Console.WriteLine("Krivi unos, nepostoji id koji si unio");
+                    return;
+                }
+
+                Console.Write("Jeste li sigurni želite li izbrisat korisnika, unesi (Yes)");
+                string verifyDeletion = Console.ReadLine();
+                if(verifyDeletion == "Yes")
+                {
+                    members.Remove(selectedId);
+                    Console.WriteLine("Uspjesno izbrisan korisnik");
+                }
+
+                else
+                {
+                    Console.WriteLine("Brisanje zaustavlljeno");
+                }
+
+                
+
+
+            }
+
+
+
+            void DeleteMember()
+            {
+                while (true)
+                {
+                    string template = """
+
+
+
+                        BRISANJE ČLANA
+
+                        1 - Brisanje po  Id-u
+
+                        2 - Brisanje po Imenu i Prezimenu
+                         
+                        0 - Povratak na Members izbornik
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.WriteLine("");
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            DeleteMemberById();
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+
+                }
+            }
+
+
 
 
 
@@ -259,6 +356,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            DeleteMember();
                             break;
 
                         case ("3"):
