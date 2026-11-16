@@ -98,7 +98,76 @@ namespace Internship_2_C_Sharp
                 Console.WriteLine("Korisnik uspješno kreiran");
             }
 
+
+
+            void ListAllMembersSorted()
+            {
+                List<(int id,string firstName, string lastName, int borrowCount)> memberList = new List<(int id,string firstName, string lastName, int borrowCount)>();
+                foreach(var (key,value) in members)
+                {
+                    var temporaryTouple=(key,value.firstName, value.lastName, value.borrowList.Count);
+                    memberList.Add(temporaryTouple);
+                }
+                memberList.Sort((a, b) => string.Compare(a.lastName, b.lastName));
+
+                Console.WriteLine("\n");
+                foreach(var member in memberList)
+                {
+                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
+                }
+                Console.WriteLine("\n");
+
+            }
+
+
+
+            void OverviewMembers()
+            {
+                while (true)
+                {
+                    string template = """
+
+                        PREGLED ČLANOVA
+
+                        1 - Ispis članova abecedno po prezimenu
+
+                        2 - Ispis članova mlađih od 18 godina
+
+                        3 - Ispis svih članova koji trenutno imaju barem jednu knjigu
+
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            ListAllMembersSorted();
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+
+                    }
+                }
+            }
+
             
+
+
 
             void PrintMembersMenu()
             {
@@ -136,6 +205,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
+                            OverviewMembers();
                             break;
 
                         case ("0"):
@@ -156,6 +226,7 @@ namespace Internship_2_C_Sharp
 
             void PrintMainMenu()
             {
+                UpdateDataForOverdueBorrows();
                 while (true)
                 {
                     string template = """
