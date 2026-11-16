@@ -7,7 +7,7 @@ namespace Internship_2_C_Sharp
         static void Main(string[] args)
         {
 
-            int membersNextid = 4;
+            int membersNextId = 4;
             int borrowListNextId = 7;
 
 
@@ -57,6 +57,49 @@ namespace Internship_2_C_Sharp
                 }
             }
 
+
+
+
+
+
+
+
+
+
+
+            void AddNewMember()
+            {
+                Console.Write("Unesi ime: ");
+                string firstNameInput = Console.ReadLine();
+                Console.WriteLine("\n");
+
+                Console.Write("Unesi prezime: ");
+                string lastNameInput = Console.ReadLine();
+                Console.WriteLine("\n");
+
+                Console.Write("Unesi datum rođenja: ");
+                string dateInput = Console.ReadLine();
+                Console.WriteLine("\n");
+
+                if(firstNameInput.Length == 0|| lastNameInput.Length == 0|| dateInput.Length == 0){
+                    Console.WriteLine("Kriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
+                    return;
+                }
+                DateOnly birthDate;
+                if (DateOnly.TryParse(dateInput, out birthDate)) { }
+                else
+                {
+                    Console.WriteLine("Greska, kriv format datuma");
+                    return;
+                }
+
+                members.Add(membersNextId, (firstNameInput, lastNameInput, birthDate, new List<int>()));
+                membersNextId++;
+                Console.WriteLine("Korisnik uspješno kreiran");
+            }
+
+            
+
             void PrintMembersMenu()
             {
                 while (true)
@@ -78,10 +121,12 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine(template);
                     Console.Write("Odabir: ");
                     string input = Console.ReadLine();
+                    Console.WriteLine("");
 
                     switch (input)
                     {
                         case ("1"):
+                            AddNewMember();
                             break;
 
                         case ("2"):
@@ -106,9 +151,6 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("\n");
                 }
             }
-
-
-
 
 
 
@@ -153,9 +195,6 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("\n");
                 }
             }
-
-
-
 
             PrintMainMenu();
         }
