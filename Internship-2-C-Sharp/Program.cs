@@ -37,7 +37,7 @@ namespace Internship_2_C_Sharp
             borrowList.Add(6, ("The Brothers Karamazov", "Fjodor Dostojevski", DateOnly.FromDateTime(DateTime.Today.AddDays(-22)), null, 0, 0));
 
 
-            void UpdateDataForOverdueBorrows()
+            void UpdateDataForUnReturnedBorrows()
             {
                 foreach(var (key,value) in borrowList)
                 {
@@ -85,12 +85,20 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("Kriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
                     return;
                 }
+
                 DateOnly birthDate;
                 if (DateOnly.TryParse(dateInput, out birthDate)) { }
                 else
                 {
                     Console.WriteLine("Greska, kriv format datuma");
                     return;
+                }
+
+                if (birthDate > DateOnly.FromDateTime(DateTime.Today))
+                {
+                    Console.WriteLine("Greska, datum je u buducnosti");
+                    return;
+
                 }
 
                 members.Add(membersNextId, (firstNameInput, lastNameInput, birthDate, new List<int>()));
@@ -142,6 +150,31 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void ListMembersWithNotReturned()
+            {
+                List<(int id, string firstName, string lastName, int borrowCount)> memberList = new List<(int id, string firstName, string lastName, int borrowCount)>();
+                foreach (var (key, value) in members)
+                {
+                    foreach(var borrowedBook in value.borrowList)
+                    {
+                        if (borrowList[borrowedBook].returnDate == null)
+                        {
+                            var temporaryTouple = (key, value.firstName, value.lastName, value.borrowList.Count);
+                            memberList.Add(temporaryTouple);
+                            break;
+                        }
+                    }
+                }
+
+                Console.WriteLine("\n");
+                foreach (var member in memberList)
+                {
+                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
+                }
+                Console.WriteLine("\n");
+            }
+
+
 
             void OverviewMembers()
             {
@@ -155,7 +188,7 @@ namespace Internship_2_C_Sharp
 
                         2 - Ispis članova mlađih od 18 godina
 
-                        3 - Ispis svih članova koji trenutno imaju barem jednu knjigu
+                        3 - Ispis svih članova koji trenutno imaju barem jednu knjigu nevraćenu
 
                         0 - Povratak na Members izbornik
 
@@ -177,6 +210,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            ListMembersWithNotReturned();
                             break;
 
                         case ("0"):
@@ -199,6 +233,7 @@ namespace Internship_2_C_Sharp
                 while (true)
                 {
                     string template = """
+
 
                         1 - Unos novog člana
 
@@ -251,7 +286,7 @@ namespace Internship_2_C_Sharp
 
             void PrintMainMenu()
             {
-                UpdateDataForOverdueBorrows();
+                UpdateDataForUnReturnedBorrows();
                 while (true)
                 {
                     string template = """
