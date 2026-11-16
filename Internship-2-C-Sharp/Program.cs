@@ -37,7 +37,7 @@ namespace Internship_2_C_Sharp
             borrowList.Add(6, ("The Brothers Karamazov", "Fjodor Dostojevski", DateOnly.FromDateTime(DateTime.Today.AddDays(-22)), null, 0, 0));
 
 
-            void UpdateDate()
+            void UpdateDataForOverdueBorrows()
             {
                 foreach(var (key,value) in borrowList)
                 {
@@ -57,17 +57,49 @@ namespace Internship_2_C_Sharp
                 }
             }
 
-            UpdateDate();
-            foreach( var (key,value) in borrowList)
+
+            void PrintMainMenu()
             {
-                Console.WriteLine(value.returnDate);
-                Console.WriteLine(value.overdueDays);
-                Console.WriteLine(value.lateFee);
-                Console.WriteLine("\n");
+                while (true)
+                {
+                    string template = """
+                        APLIKACIJA ZA EVIDENCIJU POSUDBI
+
+                        1 - ČLANOVI
+
+                        2 - POSUDBE
+
+                        0 - IZLAZ IZ APLKACIJE
+
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("\n");
+                }
             }
 
-
-
+            PrintMainMenu();
         }
     }
 }
