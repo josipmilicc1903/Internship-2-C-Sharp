@@ -57,6 +57,60 @@ namespace Internship_2_C_Sharp
                 }
             }
 
+            void PrintMembersMenu()
+            {
+                while (true)
+                {
+                    string template = """
+
+                        1 - Unos novog člana
+
+                        2 - Brisanje člana
+
+                        3 - Uređivanje člana
+
+                        4 - Pregled svih članova
+
+                        0 - Povratak na glavni izbornik
+                         
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("4"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+
+                    }
+                    Console.WriteLine("\n");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("\n");
+                }
+            }
+
+
+
+
+
 
             void PrintMainMenu()
             {
@@ -65,11 +119,11 @@ namespace Internship_2_C_Sharp
                     string template = """
                         APLIKACIJA ZA EVIDENCIJU POSUDBI
 
-                        1 - ČLANOVI
+                        1 - Članovi
 
-                        2 - POSUDBE
+                        2 - Posudbe
 
-                        0 - IZLAZ IZ APLKACIJE
+                        0 - Izlaz iz aplikacije
 
                         """;
 
@@ -81,6 +135,7 @@ namespace Internship_2_C_Sharp
                     switch (input)
                     {
                         case ("1"):
+                            PrintMembersMenu();
                             break;
 
                         case ("2"):
@@ -98,6 +153,9 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("\n");
                 }
             }
+
+
+
 
             PrintMainMenu();
         }
