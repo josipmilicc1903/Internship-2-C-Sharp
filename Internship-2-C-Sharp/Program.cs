@@ -101,7 +101,7 @@ namespace Internship_2_C_Sharp
 
                 }
 
-                members.Add(membersNextId, (firstNameInput, lastNameInput, birthDate, new List<int>()));
+                members.Add(membersNextId, (firstNameInput.Trim(), lastNameInput.Trim(), birthDate, new List<int>()));
                 membersNextId++;
                 Console.WriteLine("Korisnik uspješno kreiran");
             }
@@ -258,7 +258,7 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
-                Console.Write("Jeste li sigurni želite li izbrisat korisnika, unesi (Yes)");
+                Console.Write("Jeste li sigurni želite li izbrisat korisnika, unesi (Yes): ");
                 string verifyDeletion = Console.ReadLine();
                 if(verifyDeletion == "Yes")
                 {
@@ -275,6 +275,7 @@ namespace Internship_2_C_Sharp
 
 
             }
+
 
 
 
