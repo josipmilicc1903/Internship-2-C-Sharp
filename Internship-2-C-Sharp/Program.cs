@@ -120,6 +120,28 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void ListMembersUnder18()
+            {
+                List<(int id, string firstName, string lastName, int borrowCount)> memberList = new List<(int id, string firstName, string lastName, int borrowCount)>();
+                foreach (var (key, value) in members)
+                {
+                    int daysFromBirth = DateOnly.FromDateTime(DateTime.Today).DayNumber - value.birthDate.DayNumber;
+                    int age = daysFromBirth / 365;
+                    if (age <= 18)
+                    {
+                        var temporaryTouple = (key, value.firstName, value.lastName, value.borrowList.Count);
+                        memberList.Add(temporaryTouple);
+                    }
+                }
+                Console.WriteLine("\n");
+                foreach (var member in memberList)
+                {
+                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
+                }
+                Console.WriteLine("\n");
+            }
+
+
 
             void OverviewMembers()
             {
@@ -135,6 +157,8 @@ namespace Internship_2_C_Sharp
 
                         3 - Ispis svih članova koji trenutno imaju barem jednu knjigu
 
+                        0 - Povratak na Members izbornik
+
                         """;
 
                     Console.WriteLine(template);
@@ -149,6 +173,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            ListMembersUnder18();
                             break;
 
                         case ("3"):
