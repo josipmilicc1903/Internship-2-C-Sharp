@@ -57,6 +57,17 @@ namespace Internship_2_C_Sharp
                 }
             }
 
+            bool IsVerified(string action)
+            {
+                Console.Write($"\nJeste li sigurni da želite {action} korisnika (Unesite Da): ");
+                string verification = Console.ReadLine();
+                if (verification == "Da" || verification == "da")
+                {
+                    return true;
+                }
+                return false;
+            }
+
 
 
 
@@ -261,22 +272,13 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
-                Console.Write("Jeste li sigurni želite li izbrisat korisnika, unesi (Yes): ");
-                string verifyDeletion = Console.ReadLine();
-                if(verifyDeletion == "Yes")
+                if (IsVerified("obrisat"))
                 {
                     members.Remove(selectedId);
-                    Console.WriteLine("Uspjesno izbrisan korisnik");
+                    Console.WriteLine("\nKorisnik uspjesno izbrisan");
+                    return;
                 }
-
-                else
-                {
-                    Console.WriteLine("Brisanje zaustavlljeno");
-                }
-
-                
-
-
+                Console.WriteLine("\nBrisanje zaustavljeno");
             }
 
             void DeleteMemberByName()
@@ -310,13 +312,13 @@ namespace Internship_2_C_Sharp
 
                 if(selectedId != 0)
                 {
-                    Console.Write("\nJeste li sigurni da želite obrisat korisnika (Unesite Da): ");
-                    string verification=Console.ReadLine();
-                    if (verification == "Da" || verification == "da")
+                    if (IsVerified("izbrisat"))
                     {
                         members.Remove(selectedId);
-                        Console.WriteLine("\nKorisnik uspjesno izbrisan");
+                        Console.WriteLine("Korisnik uspjesno izbrisan");
+                        return;
                     }
+                    Console.WriteLine("Brisanje zaustavljeno");
                     return;
 
                 }
