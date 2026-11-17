@@ -68,6 +68,17 @@ namespace Internship_2_C_Sharp
                 return false;
             }
 
+            void PrintMemberList(List<(int id, string firstName, string lastName, int borrowCount)> memberList)
+            {
+                Console.WriteLine("\n");
+                foreach (var member in memberList)
+                {
+                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
+                }
+                Console.WriteLine("\n");
+
+            }
+
 
 
 
@@ -133,12 +144,7 @@ namespace Internship_2_C_Sharp
                 }
                 memberList.Sort((a, b) => string.Compare(a.lastName, b.lastName));
 
-                Console.WriteLine("\n");
-                foreach(var member in memberList)
-                {
-                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
-                }
-                Console.WriteLine("\n");
+                PrintMemberList(memberList);
 
             }
 
@@ -156,12 +162,7 @@ namespace Internship_2_C_Sharp
                         memberList.Add(temporaryTouple);
                     }
                 }
-                Console.WriteLine("\n");
-                foreach (var member in memberList)
-                {
-                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
-                }
-                Console.WriteLine("\n");
+                PrintMemberList(memberList);
             }
 
 
@@ -181,12 +182,7 @@ namespace Internship_2_C_Sharp
                     }
                 }
 
-                Console.WriteLine("\n");
-                foreach (var member in memberList)
-                {
-                    Console.WriteLine($"Id: {member.id}, Prezime: {member.lastName}, Ime: {member.firstName}, Broj posudbi: {member.borrowCount}");
-                }
-                Console.WriteLine("\n");
+                PrintMemberList(memberList);
             }
 
 
