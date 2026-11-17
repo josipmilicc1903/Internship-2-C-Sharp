@@ -110,20 +110,20 @@ namespace Internship_2_C_Sharp
                 if (DateOnly.TryParse(dateInput, out birthDate)) { }
                 else
                 {
-                    Console.WriteLine("Greska, kriv format datuma");
+                    Console.WriteLine("\nGreska, kriv format datuma");
                     return;
                 }
 
                 if (birthDate > DateOnly.FromDateTime(DateTime.Today))
                 {
-                    Console.WriteLine("Greska, datum je u buducnosti");
+                    Console.WriteLine("\nGreska, datum rodenja nemoze bit u buducnosti");
                     return;
 
                 }
 
                 members.Add(membersNextId, (firstNameInput.Trim(), lastNameInput.Trim(), birthDate, new List<int>()));
                 membersNextId++;
-                Console.WriteLine("Korisnik uspješno kreiran");
+                Console.WriteLine("\nKorisnik uspješno kreiran");
             }
 
 
@@ -378,7 +378,7 @@ namespace Internship_2_C_Sharp
 
             void EditmemberFirstName(int id)
             {
-                Console.Write("Unesi ime novo: ");
+                Console.Write("Promjeni ime: ");
                 string inputFirstName=Console.ReadLine();
 
                 if(inputFirstName.Length == 0)
@@ -400,12 +400,12 @@ namespace Internship_2_C_Sharp
 
             void EditmemberLastName(int id)
             {
-                Console.Write("Unesi prezime novo: ");
+                Console.Write("Promjeni prezime: ");
                 string inputLastName = Console.ReadLine();
 
                 if (inputLastName.Length == 0)
                 {
-                    Console.WriteLine("Kriv unos, Nemozes unijet praznu rijec");
+                    Console.WriteLine("\nKriv unos, Nemozes unijet praznu rijec");
                     return;
                 }
 
@@ -419,7 +419,33 @@ namespace Internship_2_C_Sharp
 
             }
 
+            void EditmemberBirthDate(int id)
+            {
+                Console.Write("Promjeni datum rođenja: ");
+                string inputBirthDate = Console.ReadLine();
 
+                DateOnly birthDate;
+                if (!DateOnly.TryParse(inputBirthDate,out birthDate))
+                {
+                    Console.WriteLine("\nKriv unos datuma");
+                    return;
+                }
+
+                if (birthDate > DateOnly.FromDateTime(DateTime.Now))
+                {
+                    Console.WriteLine("\nGreska, datum nemoze biti u buducnosti");
+                    return;
+                }
+
+                if (IsVerified("uredit"))
+                {
+                    members[id] = (members[id].firstName, members[id].lastName, birthDate, members[id].borrowList);
+                    Console.WriteLine("\nUređivanje uspjesno");
+                    return;
+                }
+                Console.WriteLine("\nUredivanje prekinuto");
+
+            }
 
 
 
@@ -459,6 +485,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            EditmemberBirthDate(id);
                             break;
 
                         case ("0"):
