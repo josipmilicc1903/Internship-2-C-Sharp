@@ -71,18 +71,16 @@ namespace Internship_2_C_Sharp
             {
                 Console.Write("Unesi ime: ");
                 string firstNameInput = Console.ReadLine();
-                Console.WriteLine("\n");
 
-                Console.Write("Unesi prezime: ");
-                string lastNameInput = Console.ReadLine();
-                Console.WriteLine("\n");
+                Console.Write("\nUnesi prezime: ");
+                string lastNameInput = Console.ReadLine();              
 
-                Console.Write("Unesi datum rođenja: ");
+                Console.Write("\nUnesi datum rođenja: ");
                 string dateInput = Console.ReadLine();
-                Console.WriteLine("\n");
+               
 
                 if(firstNameInput.Length == 0|| lastNameInput.Length == 0|| dateInput.Length == 0){
-                    Console.WriteLine("Kriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
+                    Console.WriteLine("\nKriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
                     return;
                 }
 
@@ -239,10 +237,15 @@ namespace Internship_2_C_Sharp
 
             void DeleteMemberById()
             {
-                Console.WriteLine("\n");
-                Console.Write("Unesi Id korisnika kojeg želis izbrisati: ");
+                Console.Write("\nUnesi Id korisnika kojeg želis izbrisati ili Q za izać: ");
                 string input=Console.ReadLine();
                 int selectedId;
+
+                if(input == "Q")
+                {
+                    return;
+                }
+
                 
                 if(int.TryParse(input,out selectedId)){}
                 else
@@ -275,6 +278,53 @@ namespace Internship_2_C_Sharp
 
 
             }
+
+            void DeleteMemberByName()
+            {
+                Console.WriteLine("\n");
+
+                Console.Write("Unesi Ime korisnika kojeg želiš izbrisat ili Q za izac: ");
+                string inputFirstName = Console.ReadLine();
+
+                if (inputFirstName == "Q" || inputFirstName == "q")
+                {
+                    return;
+                }
+
+                Console.Write("\nUnesi Prezime korisnika kojeg želiš izbrisat ili Q za izac: ");
+                string inputLastName = Console.ReadLine();
+
+                if(inputLastName == "Q" || inputLastName == "q")
+                {
+                    return;
+                }
+
+                int selectedId = 0;
+                foreach(var (key,value) in members) 
+                { 
+                    if (value.firstName == inputFirstName && value.lastName == inputLastName)
+                    {
+                        selectedId = key;
+                    }
+                }
+
+                if(selectedId != 0)
+                {
+                    Console.Write("\nJeste li sigurni da želite obrisat korisnika (Unesite Da): ");
+                    string verification=Console.ReadLine();
+                    if (verification == "Da" || verification == "da")
+                    {
+                        members.Remove(selectedId);
+                        Console.WriteLine("\nKorisnik uspjesno izbrisan");
+                    }
+                    return;
+
+                }
+                Console.WriteLine("\nNeuspjesno brisanje, Korisnik kojeg ste unijeli ne postoji");
+
+            }
+
+
 
 
 
@@ -309,6 +359,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            DeleteMemberByName();
                             break;
 
                         case ("0"):
