@@ -397,7 +397,29 @@ namespace Internship_2_C_Sharp
 
             }
 
-           
+
+            void EditmemberLastName(int id)
+            {
+                Console.Write("Unesi prezime novo: ");
+                string inputLastName = Console.ReadLine();
+
+                if (inputLastName.Length == 0)
+                {
+                    Console.WriteLine("Kriv unos, Nemozes unijet praznu rijec");
+                    return;
+                }
+
+                if (IsVerified("uredit"))
+                {
+                    members[id] = (members[id].firstName, inputLastName, members[id].birthDate, members[id].borrowList);
+                    Console.WriteLine("\nUređivanje uspjesno");
+                    return;
+                }
+                Console.WriteLine("\nUredivanje prekinuto");
+
+            }
+
+
 
 
 
@@ -433,6 +455,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            EditmemberLastName(id);
                             break;
 
                         case ("3"):
