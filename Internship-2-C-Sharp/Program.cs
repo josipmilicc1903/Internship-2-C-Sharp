@@ -375,12 +375,107 @@ namespace Internship_2_C_Sharp
 
 
 
+
+            void EditmemberFirstName(int id)
+            {
+                Console.Write("Unesi ime novo: ");
+                string inputFirstName=Console.ReadLine();
+
+                if(inputFirstName.Length == 0)
+                {
+                    Console.WriteLine("Kriv unos, Nemozes unijet praznu rijec");
+                    return;
+                }
+
+                if (IsVerified("uredit"))
+                {
+                    members[id] = (inputFirstName, members[id].lastName, members[id].birthDate, members[id].borrowList);
+                    Console.WriteLine("\nUređivanje uspjesno");
+                    return;
+                }
+                Console.WriteLine("\nUredivanje prekinuto");
+
+            }
+
+           
+
+
+
+
+            void EditMember(int id)
+            {
+                while (true)
+                {
+                    string template = $"""
+
+
+                            Uređivanje korisnika: {members[id].firstName} {members[id].lastName}
+
+                            1 - Uredi ime
+
+                            2 - Uredi prezime
+
+                            3 - Uredi datum rođenja
+
+                            0 - Povratak na Edit Menu
+
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            EditmemberFirstName(id);
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+
+                    }
+                }
+                
+            }
+
+            void EditMemberById()
+            {
+                Console.Write("\nUnesi Id korisnika kojeg zelis uredit: ");
+                string inputId=Console.ReadLine();
+
+                if(int.TryParse(inputId,out int id))
+                {
+                    if (members.ContainsKey(id))
+                    {
+                        EditMember(id);
+                    }
+                    return;
+                }
+                Console.WriteLine("\nKriv Unos, unesi broj");
+            }
+
+
+
+
             void PrintMembersMenu()
             {
                 while (true)
                 {
                     string template = """
 
+                        MEMBER MENU
 
                         1 - Unos novog člana
 
@@ -410,6 +505,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            EditMemberById();
                             break;
 
                         case ("4"):
