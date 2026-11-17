@@ -376,6 +376,8 @@ namespace Internship_2_C_Sharp
 
 
 
+
+
             void EditmemberFirstName(int id)
             {
                 Console.Write("Promjeni ime: ");
@@ -519,6 +521,9 @@ namespace Internship_2_C_Sharp
 
 
 
+
+
+
             void PrintMembersMenu()
             {
                 while (true)
@@ -570,10 +575,88 @@ namespace Internship_2_C_Sharp
                             break;
 
                     }
-                    Console.WriteLine("\n");
-                    Console.WriteLine("\n");
-                    Console.WriteLine("\n");
+                    Console.WriteLine("\n\n\n");
                 }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            void PrintBorrowMenu()
+            {
+                while (true)
+                {
+                    string template = """
+
+                        BORROW MENU
+
+                        1 - Unos nove posudbe
+
+                        2 - Vraćanje knjige
+
+                        3 - Brisanje posudbe
+
+                        4 - Uređivanje postoječe posudbe
+
+                        5 - Pregled svih posudbi
+
+                        6 - Izvještaji i analize
+
+                        0 - Povratak na glavni izbornik
+
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("4"):
+                            break;
+
+                        case ("5"):
+                            break;
+
+                        case ("6"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
+                }
+
             }
 
 
@@ -606,6 +689,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            PrintBorrowMenu();
                             break;
 
                         case ("0"):
@@ -615,9 +699,7 @@ namespace Internship_2_C_Sharp
                             Console.WriteLine("Unesen krivi znak");
                             break;
                     }
-                    Console.WriteLine("\n");
-                    Console.WriteLine("\n");
-                    Console.WriteLine("\n");
+                    Console.WriteLine("\n\n\n");
                 }
             }
 
