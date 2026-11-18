@@ -25,7 +25,7 @@ namespace Internship_2_C_Sharp
 
 
 
-            members.Add(1, ("Josip", "Milic", new DateOnly(2004,3,19), new List<int> { 1, 3 }));
+            members.Add(1, ("Josip", "Milic", new DateOnly(2004, 3, 19), new List<int> { 1, 3 }));
             members.Add(2, ("Marko", "Matic", new DateOnly(2002, 10, 11), new List<int> { 2, 4 }));
             members.Add(3, ("Ivan", "Ivanovic", new DateOnly(2010, 1, 21), new List<int> { 5, 6 }));
 
@@ -39,13 +39,13 @@ namespace Internship_2_C_Sharp
 
             void UpdateDataForUnReturnedBorrows()
             {
-                foreach(var (key,value) in borrowList)
+                foreach (var (key, value) in borrowList)
                 {
                     DateOnly todayDate = DateOnly.FromDateTime(DateTime.Today);
-                    if(value.returnDate == null)
+                    if (value.returnDate == null)
                     {
                         int dayDifference = todayDate.DayNumber - value.borrowDate.DayNumber;
-                        if(dayDifference > 21)
+                        if (dayDifference > 21)
                         {
                             int overdueDays = dayDifference - 21;
                             double lateFee = overdueDays * 0.5;
@@ -70,7 +70,7 @@ namespace Internship_2_C_Sharp
 
             bool HasNotReturned(int idMember)
             {
-                foreach(var key in members[idMember].borrowList)
+                foreach (var key in members[idMember].borrowList)
                 {
                     if (borrowList[key].returnDate == null)
                     {
@@ -106,7 +106,7 @@ namespace Internship_2_C_Sharp
 
             }
 
-            (string inputFirstName,string inputLastName,string inputBirthDate) InputMemberData()
+            (string inputFirstName, string inputLastName, string inputBirthDate) InputMemberData()
             {
                 Console.Write("Unesi ime: ");
                 string firstNameInput = Console.ReadLine();
@@ -121,6 +121,65 @@ namespace Internship_2_C_Sharp
             }
 
 
+            string PrintTemplate(string template)
+            {
+                Console.WriteLine(template);
+                Console.Write("Odabir: ");
+                string input = Console.ReadLine();
+                Console.WriteLine("");
+
+                return input;
+
+            }
+
+            void PrintBorrowList(List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)> borrows)
+            {
+                foreach (var borrow in borrows)
+                {
+                    string returnDate = borrow.returnDate?.ToString() ?? "Nije vraceno";
+                    Console.WriteLine($"{borrow.id} |  \"{borrow.bookTitle}\" - {borrow.author} | Posuđeno : {borrow.borrowDate} | " +
+                        $"Vračeno: {returnDate} | Kašnjenje : {borrow.overdueDays} | Zakasnina : {borrow.lateFee}");
+
+                }
+            }
+
+            List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)> CreateBorrowTuple() {
+                List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)> borrows =
+                    new List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)>();
+
+                foreach (var (key, value) in borrowList)
+                {
+                    var tuple = (key, value.bookTitle, value.author, value.borrowDate, value.returnDate, value.overdueDays, value.lateFee);
+                    borrows.Add(tuple);
+
+                }
+                return borrows;
+            }
+
+
+            List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)> SortedTupleByDate()
+            {
+                var borrows = CreateBorrowTuple();
+
+                Console.Write("\nUlazno (odaberi 1) ili Silazno (odaberi drugi znak) sortiranje: ");
+                string inputSort = Console.ReadLine();
+                if(inputSort == "1")
+                {
+                    borrows.Sort((a, b) => a.borrowDate.CompareTo(b.borrowDate));
+                    return borrows;
+
+                }
+                borrows.Sort((a, b) => b.borrowDate.CompareTo(a.borrowDate));
+                return borrows;            
+            }
+
+
+
+
+
+
+
+
 
 
 
@@ -133,9 +192,9 @@ namespace Internship_2_C_Sharp
             void AddNewMember()
             {
                 var creationData = InputMemberData();
-               
 
-                if(creationData.inputFirstName.Length == 0|| creationData.inputLastName.Length == 0|| creationData.inputBirthDate.Length == 0){
+
+                if (creationData.inputFirstName.Length == 0 || creationData.inputLastName.Length == 0 || creationData.inputBirthDate.Length == 0) {
                     Console.WriteLine("\nKriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
                     return;
                 }
@@ -176,10 +235,10 @@ namespace Internship_2_C_Sharp
 
             void ListAllMembersSorted()
             {
-                List<(int id,string firstName, string lastName, int borrowCount)> memberList = new List<(int id,string firstName, string lastName, int borrowCount)>();
-                foreach(var (key,value) in members)
+                List<(int id, string firstName, string lastName, int borrowCount)> memberList = new List<(int id, string firstName, string lastName, int borrowCount)>();
+                foreach (var (key, value) in members)
                 {
-                    var temporaryTouple=(key,value.firstName, value.lastName, value.borrowList.Count);
+                    var temporaryTouple = (key, value.firstName, value.lastName, value.borrowList.Count);
                     memberList.Add(temporaryTouple);
                 }
                 memberList.Sort((a, b) => string.Compare(a.lastName, b.lastName));
@@ -211,7 +270,7 @@ namespace Internship_2_C_Sharp
                 List<(int id, string firstName, string lastName, int borrowCount)> memberList = new List<(int id, string firstName, string lastName, int borrowCount)>();
                 foreach (var (key, value) in members)
                 {
-                    foreach(var borrowedBook in value.borrowList)
+                    foreach (var borrowedBook in value.borrowList)
                     {
                         if (borrowList[borrowedBook].returnDate == null)
                         {
@@ -247,10 +306,7 @@ namespace Internship_2_C_Sharp
 
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
@@ -285,16 +341,16 @@ namespace Internship_2_C_Sharp
             void DeleteMemberById()
             {
                 Console.Write("\nUnesi Id korisnika kojeg želis izbrisati ili Q za izać: ");
-                string input=Console.ReadLine();
+                string input = Console.ReadLine();
                 int selectedId;
 
-                if(input == "Q")
+                if (input == "Q")
                 {
                     return;
                 }
 
-                
-                if(int.TryParse(input,out selectedId)){}
+
+                if (int.TryParse(input, out selectedId)) { }
                 else
                 {
                     Console.WriteLine("Kriv unos, trebaš unijeti broj");
@@ -339,16 +395,16 @@ namespace Internship_2_C_Sharp
                 Console.Write("\nUnesi Prezime korisnika kojeg želiš izbrisat ili Q za izac: ");
                 string inputLastName = Console.ReadLine();
 
-                if(inputLastName == "Q" || inputLastName == "q")
+                if (inputLastName == "Q" || inputLastName == "q")
                 {
                     return;
                 }
 
                 int selectedId = ReturnUserId(inputFirstName, inputLastName);
 
-                if(selectedId != 0)
+                if (selectedId != 0)
                 {
-                    if (HasNotReturned(selectedId)){
+                    if (HasNotReturned(selectedId)) {
                         Console.WriteLine("\nNemozes izbrisat korisnika koji ima nevracenu knjigu");
                         return;
                     }
@@ -389,11 +445,7 @@ namespace Internship_2_C_Sharp
                         0 - Povratak na Members izbornik
                         """;
 
-                    Console.WriteLine(template);
-                    Console.WriteLine("");
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
@@ -426,9 +478,9 @@ namespace Internship_2_C_Sharp
             void EditmemberFirstName(int id)
             {
                 Console.Write("Promjeni ime: ");
-                string inputFirstName=Console.ReadLine();
+                string inputFirstName = Console.ReadLine();
 
-                if(inputFirstName.Length == 0)
+                if (inputFirstName.Length == 0)
                 {
                     Console.WriteLine("Kriv unos, Nemozes unijet praznu rijec");
                     return;
@@ -472,7 +524,7 @@ namespace Internship_2_C_Sharp
                 string inputBirthDate = Console.ReadLine();
 
                 DateOnly birthDate;
-                if (!DateOnly.TryParse(inputBirthDate,out birthDate))
+                if (!DateOnly.TryParse(inputBirthDate, out birthDate))
                 {
                     Console.WriteLine("\nKriv unos datuma");
                     return;
@@ -516,10 +568,7 @@ namespace Internship_2_C_Sharp
 
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
@@ -544,15 +593,15 @@ namespace Internship_2_C_Sharp
 
                     }
                 }
-                
+
             }
 
             void EditMemberById()
             {
                 Console.Write("\nUnesi Id korisnika kojeg zelis uredit: ");
-                string inputId=Console.ReadLine();
+                string inputId = Console.ReadLine();
 
-                if(int.TryParse(inputId,out int id))
+                if (int.TryParse(inputId, out int id))
                 {
                     if (members.ContainsKey(id))
                     {
@@ -589,10 +638,7 @@ namespace Internship_2_C_Sharp
                          
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
@@ -625,7 +671,19 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void PrintAllBorrows()
+            {
+                var borrows = CreateBorrowTuple();
+                PrintBorrowList(borrows);
+            }
 
+            void PrintSortedBorrows()
+            {
+                var borrows = SortedTupleByDate();
+                PrintBorrowList(borrows);
+            }
+
+            
 
 
             void ListBorrowMenu()
@@ -648,17 +706,16 @@ namespace Internship_2_C_Sharp
 
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
                         case ("1"):
+                            PrintAllBorrows();
                             break;
 
                         case ("2"):
+                            PrintSortedBorrows();
                             break;
 
                         case ("3"):
@@ -706,10 +763,7 @@ namespace Internship_2_C_Sharp
 
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
@@ -762,10 +816,7 @@ namespace Internship_2_C_Sharp
 
                         """;
 
-                    Console.WriteLine(template);
-                    Console.Write("Odabir: ");
-                    string input = Console.ReadLine();
-                    Console.WriteLine("");
+                    string input = PrintTemplate(template);
 
                     switch (input)
                     {
