@@ -81,6 +81,20 @@ namespace Internship_2_C_Sharp
 
             }
 
+            int ReturnUserId(string inputFirstName, string inputLastName)
+            {
+                int selectedId = 0;
+
+                foreach (var (key, value) in members)
+                {
+                    if (value.firstName == inputFirstName && value.lastName == inputLastName)
+                    {
+                        selectedId = key;
+                    }
+                }
+                return selectedId;
+            }
+
             void PrintMemberList(List<(int id, string firstName, string lastName, int borrowCount)> memberList)
             {
                 Console.WriteLine("\n");
@@ -134,9 +148,15 @@ namespace Internship_2_C_Sharp
 
                 }
 
-                members.Add(membersNextId, (firstNameInput.Trim(), lastNameInput.Trim(), birthDate, new List<int>()));
-                membersNextId++;
-                Console.WriteLine("\nKorisnik uspješno kreiran");
+                if (IsVerified("kreirati"))
+                {
+                    members.Add(membersNextId, (firstNameInput.Trim(), lastNameInput.Trim(), birthDate, new List<int>()));
+                    membersNextId++;
+                    Console.WriteLine("\nKorisnik uspješno kreiran");
+                    return;
+
+                }
+                Console.WriteLine("\nKreiranje zaustavljeno");
             }
 
 
@@ -287,6 +307,7 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
+                Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}");
                 if (IsVerified("obrisat"))
                 {
                     members.Remove(selectedId);
@@ -316,14 +337,7 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
-                int selectedId = 0;
-                foreach(var (key,value) in members) 
-                { 
-                    if (value.firstName == inputFirstName && value.lastName == inputLastName)
-                    {
-                        selectedId = key;
-                    }
-                }
+                int selectedId = ReturnUserId(inputFirstName, inputLastName);
 
                 if(selectedId != 0)
                 {
@@ -415,7 +429,7 @@ namespace Internship_2_C_Sharp
 
                 if (IsVerified("uredit"))
                 {
-                    members[id] = (inputFirstName, members[id].lastName, members[id].birthDate, members[id].borrowList);
+                    members[id] = (inputFirstName.Trim(), members[id].lastName, members[id].birthDate, members[id].borrowList);
                     Console.WriteLine("\nUređivanje uspjesno");
                     return;
                 }
@@ -437,7 +451,7 @@ namespace Internship_2_C_Sharp
 
                 if (IsVerified("uredit"))
                 {
-                    members[id] = (members[id].firstName, inputLastName, members[id].birthDate, members[id].borrowList);
+                    members[id] = (members[id].firstName, inputLastName.Trim(), members[id].birthDate, members[id].borrowList);
                     Console.WriteLine("\nUređivanje uspjesno");
                     return;
                 }
@@ -602,13 +616,6 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("\n\n\n");
                 }
             }
-
-
-
-
-
-
-
 
 
 
