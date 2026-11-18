@@ -68,6 +68,19 @@ namespace Internship_2_C_Sharp
                 return false;
             }
 
+            bool HasNotReturned(int idMember)
+            {
+                foreach(var key in members[idMember].borrowList)
+                {
+                    if (borrowList[key].returnDate == null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+
             void PrintMemberList(List<(int id, string firstName, string lastName, int borrowCount)> memberList)
             {
                 Console.WriteLine("\n");
@@ -268,6 +281,12 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
+                if (HasNotReturned(selectedId))
+                {
+                    Console.WriteLine("\nNemozes izbrisat korisnika koji ima nevracenu knjigu");
+                    return;
+                }
+
                 if (IsVerified("obrisat"))
                 {
                     members.Remove(selectedId);
@@ -308,6 +327,11 @@ namespace Internship_2_C_Sharp
 
                 if(selectedId != 0)
                 {
+                    if (HasNotReturned(selectedId)){
+                        Console.WriteLine("\nNemozes izbrisat korisnika koji ima nevracenu knjigu");
+                        return;
+                    }
+
                     if (IsVerified("izbrisat"))
                     {
                         members.Remove(selectedId);
