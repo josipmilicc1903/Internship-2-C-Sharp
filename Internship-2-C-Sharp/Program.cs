@@ -106,6 +106,20 @@ namespace Internship_2_C_Sharp
 
             }
 
+            (string inputFirstName,string inputLastName,string inputBirthDate) InputMemberData()
+            {
+                Console.Write("Unesi ime: ");
+                string firstNameInput = Console.ReadLine();
+
+                Console.Write("\nUnesi prezime: ");
+                string lastNameInput = Console.ReadLine();
+
+                Console.Write("\nUnesi datum rođenja: ");
+                string dateInput = Console.ReadLine();
+
+                return (firstNameInput, lastNameInput, dateInput);
+            }
+
 
 
 
@@ -118,23 +132,16 @@ namespace Internship_2_C_Sharp
 
             void AddNewMember()
             {
-                Console.Write("Unesi ime: ");
-                string firstNameInput = Console.ReadLine();
-
-                Console.Write("\nUnesi prezime: ");
-                string lastNameInput = Console.ReadLine();              
-
-                Console.Write("\nUnesi datum rođenja: ");
-                string dateInput = Console.ReadLine();
+                var creationData = InputMemberData();
                
 
-                if(firstNameInput.Length == 0|| lastNameInput.Length == 0|| dateInput.Length == 0){
+                if(creationData.inputFirstName.Length == 0|| creationData.inputLastName.Length == 0|| creationData.inputBirthDate.Length == 0){
                     Console.WriteLine("\nKriv unos, nesmijes ostaviti prazna polja pri popunjavanju");
                     return;
                 }
 
                 DateOnly birthDate;
-                if (DateOnly.TryParse(dateInput, out birthDate)) { }
+                if (DateOnly.TryParse(creationData.inputBirthDate, out birthDate)) { }
                 else
                 {
                     Console.WriteLine("\nGreska, kriv format datuma");
@@ -150,7 +157,7 @@ namespace Internship_2_C_Sharp
 
                 if (IsVerified("kreirati"))
                 {
-                    members.Add(membersNextId, (firstNameInput.Trim(), lastNameInput.Trim(), birthDate, new List<int>()));
+                    members.Add(membersNextId, (creationData.inputFirstName.Trim(), creationData.inputLastName.Trim(), birthDate, new List<int>()));
                     membersNextId++;
                     Console.WriteLine("\nKorisnik uspješno kreiran");
                     return;
@@ -621,11 +628,57 @@ namespace Internship_2_C_Sharp
 
 
 
+            void ListBorrowMenu()
+            {
+                while (true)
+                {
+                    string template = """
 
+                        LIST BORROWS
 
+                        1 - Sve posudbe
 
+                        2 - Posudbe Sortirane
 
+                        3 - Nevracene posudbe
 
+                        4 - Grupirane posudbe
+
+                        0 - Povratak na Borrow Menu
+
+                        """;
+
+                    Console.WriteLine(template);
+                    Console.Write("Odabir: ");
+                    string input = Console.ReadLine();
+                    Console.WriteLine("");
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("4"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
+
+                }
+            }
+        
 
 
 
@@ -673,6 +726,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("5"):
+                            ListBorrowMenu();
                             break;
 
                         case ("6"):
