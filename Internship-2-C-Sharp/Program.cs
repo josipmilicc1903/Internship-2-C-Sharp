@@ -174,6 +174,23 @@ namespace Internship_2_C_Sharp
             }
 
 
+            List<(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)> SortedTupleByOverdue()
+            {
+                var borrows = CreateBorrowTuple();
+
+                Console.Write("\nUlazno (odaberi 1) ili Silazno (odaberi drugi znak) sortiranje: ");
+                string inputSort = Console.ReadLine();
+                if (inputSort == "1")
+                {
+                    borrows.Sort((a, b) => a.lateFee.CompareTo(b.lateFee));
+                    return borrows;
+
+                }
+                borrows.Sort((a, b) => b.lateFee.CompareTo(a.lateFee));
+                return borrows;
+            }
+
+
 
 
 
@@ -677,9 +694,15 @@ namespace Internship_2_C_Sharp
                 PrintBorrowList(borrows);
             }
 
-            void PrintSortedBorrows()
+            void PrintSortedByDateBorrows()
             {
                 var borrows = SortedTupleByDate();
+                PrintBorrowList(borrows);
+            }
+
+            void PrintSortedByFeeBorrows()
+            {
+                var borrows = SortedTupleByOverdue();
                 PrintBorrowList(borrows);
             }
 
@@ -696,11 +719,13 @@ namespace Internship_2_C_Sharp
 
                         1 - Sve posudbe
 
-                        2 - Posudbe Sortirane
+                        2 - Posudbe Sortirane Po Datumu
 
-                        3 - Nevracene posudbe
+                        3 - Posudbe sortirane po zakasnini
 
-                        4 - Grupirane posudbe
+                        4 - Nevracene posudbe
+
+                        5 - Grupirane posudbe
 
                         0 - Povratak na Borrow Menu
 
@@ -715,10 +740,11 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
-                            PrintSortedBorrows();
+                            PrintSortedByDateBorrows();
                             break;
 
                         case ("3"):
+                            PrintSortedByFeeBorrows();
                             break;
 
                         case ("4"):
