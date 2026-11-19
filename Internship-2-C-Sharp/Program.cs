@@ -975,8 +975,10 @@ namespace Internship_2_C_Sharp
                 if (isTrue)
                 {
                     Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}\n");
+
                     if (IsVerifiedBorrow("izbrisat"))
                     {
+                        int flag = 0;
                         for (int i = members[selectedId].borrowList.Count - 1; i >= 0; i--)
                         {
                             int borrowId = members[selectedId].borrowList[i];
@@ -985,9 +987,11 @@ namespace Internship_2_C_Sharp
                             {
                                 members[selectedId].borrowList.RemoveAt(i);
                                 borrowList.Remove(borrowId);
+                                flag = 1;
                             }
                         }
-                        Console.WriteLine("Brisanje uspjesno obavljeno");
+                        string izlaz = flag == 0 ? "\nNema se šta za obrisat\n" : "\nBrisanje uspjesno obavljeno\n";
+                        Console.WriteLine(izlaz);
                         return;
                     }
                     Console.WriteLine("Brisanje zaustavljeno");
