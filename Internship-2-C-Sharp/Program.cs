@@ -15,7 +15,7 @@ namespace Internship_2_C_Sharp
 
             Dictionary<int, (string firstName, string lastName, DateOnly birthDate,
                 List<int> borrowList)> members = new Dictionary<int, (string firstName, string lastName, DateOnly birthDate,
-                List<int> borrows)>();
+                List<int> borrowList)>();
 
             Dictionary<int, (string bookTitle, string author, DateOnly borrowDate,
                 DateOnly? returnDate, int overdueDays, double lateFee)> borrowList = new Dictionary<int, (string bookTitle, string author, DateOnly borrowDate,
@@ -946,16 +946,53 @@ namespace Internship_2_C_Sharp
                 (bool isTrue,int selectedId) = DoesBorrowExistById(input);
                 if (isTrue)
                 {
-                    Console.WriteLine($"\n{borrowList[selectedId].bookTitle}");
+                    Console.WriteLine($"\n{borrowList[selectedId].bookTitle}\n");
                     if (IsVerifiedBorrow("izbrisat")){
+
                         RemoveBorrowIdFromMember(selectedId);
                         borrowList.Remove(selectedId);
+
                         Console.WriteLine("Brisanje posudbe uspjesno obavljeno");
                         return;
                     }
                     Console.WriteLine("Brisanje posudbe prekinuto");
                     return;
                 }
+            }
+
+            void DeleteReturnedBorrows()
+            {
+                Console.Write("Unesi Id korisnika kojem želiš izbrisat vracene ili Q za izac: ");
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "q")
+                {
+                    Console.WriteLine("Brisanje posudbe prekinuto");
+                    return;
+                }
+
+                (bool isTrue, int selectedId) = DoesUserExistById(input);
+                if (isTrue)
+                {
+                    Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}\n");
+                    if (IsVerifiedBorrow("izbrisat"))
+                    {
+                        for (int i = members[selectedId].borrowList.Count - 1; i >= 0; i--)
+                        {
+                            int borrowId = members[selectedId].borrowList[i];
+
+                            if (borrowList[borrowId].returnDate != null)
+                            {
+                                members[selectedId].borrowList.RemoveAt(i);
+                                borrowList.Remove(borrowId);
+                            }
+                        }
+                        Console.WriteLine("Brisanje uspjesno obavljeno");
+                        return;
+                    }
+                    Console.WriteLine("Brisanje zaustavljeno");
+                }
+
             }
 
 
@@ -986,6 +1023,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            DeleteReturnedBorrows();
                             break;
 
                         case ("3"):
