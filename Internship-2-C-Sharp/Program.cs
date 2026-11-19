@@ -220,6 +220,25 @@ namespace Internship_2_C_Sharp
 
             }
 
+            (bool isTrue,int selectedId) DoesUserExistById(string input)
+            {
+                int selectedId = 0;
+                if (int.TryParse(input, out selectedId)) { }
+                else
+                {
+                    Console.WriteLine("Kriv unos, trebaš unijeti broj");
+                    Console.WriteLine("\n");
+                    return (false,-1);
+                }
+
+                if (!members.ContainsKey(selectedId))
+                {
+                    Console.WriteLine("Krivi unos, nepostoji id koji si unio");
+                    return (false,-1);
+                }
+                return (true, selectedId);
+            }
+
             
 
 
@@ -849,6 +868,44 @@ namespace Internship_2_C_Sharp
             }
         
 
+            void CreateNewBorrow()
+            {
+                Console.Write("Unesi Id korisnika koji posuđuje: ");
+                string input = Console.ReadLine();
+
+                (bool isTrue,int selectedId)=DoesUserExistById(input);
+                if (isTrue)
+                {
+                    Console.Write("Unesi naslov knjige ili Q za izac: ");
+                    string inputBookTitle=Console.ReadLine();
+
+                    if(inputBookTitle.ToLower() == "q")
+                    {
+                        return;
+                    }
+
+                    Console.Write("Unesi autora knjige ili Q za izac: ");
+                    string inputBookAuthor = Console.ReadLine();
+
+                    if (inputBookAuthor.ToLower() == "q")
+                    {
+                        return;
+                    }
+
+                    if (inputBookTitle.Length != 0 && inputBookAuthor.Length != 0)
+                    {
+                        borrowList.Add(borrowListNextId, (inputBookTitle, inputBookAuthor, DateOnly.FromDateTime(DateTime.Today), null, 0, 0));
+                        members[selectedId].borrowList.Add(borrowListNextId);
+                        borrowListNextId++;
+
+                        Console.WriteLine($"\nPosudba uspjesno kreirana, treba biti vracena do: {DateOnly.FromDateTime(DateTime.Today.AddDays(21))}\n");
+                        return;
+
+                    }
+                    Console.WriteLine("Kriv unos, nemogu polja bit prazna");
+                }
+            }
+
 
 
             void PrintBorrowMenu()
@@ -880,6 +937,7 @@ namespace Internship_2_C_Sharp
                     switch (input)
                     {
                         case ("1"):
+                            CreateNewBorrow();
                             break;
 
                         case ("2"):
