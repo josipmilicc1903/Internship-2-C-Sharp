@@ -706,6 +706,13 @@ namespace Internship_2_C_Sharp
                 PrintBorrowList(borrows);
             }
 
+            void PrintUnereturnedBorrows()
+            {
+                var borrows = CreateBorrowTuple();
+                borrows.RemoveAll(borrow => borrow.returnDate != null);
+                PrintBorrowList(borrows);
+            }
+
             
 
 
@@ -748,6 +755,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
+                            PrintUnereturnedBorrows();
                             break;
 
                         case ("0"):
