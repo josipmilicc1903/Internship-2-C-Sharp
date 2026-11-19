@@ -69,6 +69,17 @@ namespace Internship_2_C_Sharp
                 return false;
             }
 
+            bool IsVerifiedBorrow(string action)
+            {
+                Console.Write($"\nJeste li sigurni da želite {action} posudbu (Unesite Da): ");
+                string verification = Console.ReadLine();
+                if (verification == "Da" || verification == "da")
+                {
+                    return true;
+                }
+                return false;
+            }
+
             bool HasNotReturned(int idMember)
             {
                 foreach (var key in members[idMember].borrowList)
@@ -239,7 +250,37 @@ namespace Internship_2_C_Sharp
                 return (true, selectedId);
             }
 
-            
+            (bool isTrue, int selectedId) DoesBorrowExistById(string input)
+            {
+                int selectedId = 0;
+                if (int.TryParse(input, out selectedId)) { }
+                else
+                {
+                    Console.WriteLine("Kriv unos, trebaš unijeti broj");
+                    Console.WriteLine("\n");
+                    return (false, -1);
+                }
+
+                if (!borrowList.ContainsKey(selectedId))
+                {
+                    Console.WriteLine("Krivi unos, nepostoji id koji si unio");
+                    return (false, -1);
+                }
+                return (true, selectedId);
+            }
+
+            void RemoveBorrowIdFromMember(int borrowId)
+            {
+                foreach (var (key, value) in members)
+                {
+                    if (value.borrowList.Contains(borrowId))
+                    {
+                        value.borrowList.Remove(borrowId);
+                    }
+                }
+            }
+
+
 
 
 
@@ -667,10 +708,6 @@ namespace Internship_2_C_Sharp
 
 
 
-
-
-
-
             void PrintMembersMenu()
             {
                 while (true)
@@ -861,11 +898,13 @@ namespace Internship_2_C_Sharp
                 (bool isTrue,int selectedId)=DoesUserExistById(input);
                 if (isTrue)
                 {
+                    Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}\n");
                     Console.Write("Unesi naslov knjige ili Q za izac: ");
                     string inputBookTitle=Console.ReadLine();
 
                     if(inputBookTitle.ToLower() == "q")
                     {
+                        Console.WriteLine("\nKreiranje nove posudbe zaustavljeno");
                         return;
                     }
 
@@ -874,6 +913,7 @@ namespace Internship_2_C_Sharp
 
                     if (inputBookAuthor.ToLower() == "q")
                     {
+                        Console.WriteLine("\nKreiranjenove posudbe zaustavljeno");
                         return;
                     }
 
@@ -888,6 +928,77 @@ namespace Internship_2_C_Sharp
 
                     }
                     Console.WriteLine("Kriv unos, nemogu polja bit prazna");
+                }
+            }
+
+
+            void DeleteById()
+            {
+                Console.Write("Unesi Id posudbe koju želiš izbrisat ili Q za izac: ");
+                string input = Console.ReadLine();
+
+                if(input.ToLower() == "q")
+                {
+                    Console.WriteLine("Brisanje posudbe prekinuto");
+                    return;
+                }
+
+                (bool isTrue,int selectedId) = DoesBorrowExistById(input);
+                if (isTrue)
+                {
+                    Console.WriteLine($"\n{borrowList[selectedId].bookTitle}");
+                    if (IsVerifiedBorrow("izbrisat")){
+                        RemoveBorrowIdFromMember(selectedId);
+                        borrowList.Remove(selectedId);
+                        Console.WriteLine("Brisanje posudbe uspjesno obavljeno");
+                        return;
+                    }
+                    Console.WriteLine("Brisanje posudbe prekinuto");
+                    return;
+                }
+            }
+
+
+            void DeleteBorrow()
+            {
+                while (true)
+                {
+                    string template = """
+
+                        DELETE BORROW
+
+                        1 - Izbrisi po Id-u
+
+                        2 - Izbrisi sve vraćene posudbe odabranog člana
+
+                        3 - Izbrisi sve posudbe sa zakasninom od unesenog iznosa
+
+                        0 - Natrag na Borrow menu
+
+                        """;
+
+                    string input = PrintTemplate(template);
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            DeleteById();
+                            break;
+
+                        case ("2"):
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
                 }
             }
 
@@ -929,6 +1040,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            DeleteBorrow();
                             break;
 
                         case ("4"):
