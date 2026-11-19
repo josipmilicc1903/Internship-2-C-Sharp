@@ -706,10 +706,22 @@ namespace Internship_2_C_Sharp
                 PrintBorrowList(borrows);
             }
 
-            void PrintUnereturnedBorrows()
+            void PrintUnreturnedBorrows()
             {
                 var borrows = CreateBorrowTuple();
                 borrows.RemoveAll(borrow => borrow.returnDate != null);
+                PrintBorrowList(borrows);
+            }
+
+            void PrintBorrowByTitleOrAuthor()
+            {
+                var borrows = CreateBorrowTuple();
+
+                Console.Write("Unesi ime autora ili naslov knjige za filtraciju posudbi: ");
+                string input = Console.ReadLine();
+
+                borrows.RemoveAll(borrow => borrow.bookTitle.ToLower() != input.Trim().ToLower() && borrow.author.ToLower() != input.Trim().ToLower());
+
                 PrintBorrowList(borrows);
             }
 
@@ -732,7 +744,9 @@ namespace Internship_2_C_Sharp
 
                         4 - Nevracene posudbe
 
-                        5 - Grupirane posudbe
+                        5 - Pretraga po naslovu ili autoru
+
+                        6 - Grupirane posudbe
 
                         0 - Povratak na Borrow Menu
 
@@ -755,7 +769,14 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
-                            PrintUnereturnedBorrows();
+                            PrintUnreturnedBorrows();
+                            break;
+
+                        case ("5"):
+                            PrintBorrowByTitleOrAuthor();
+                            break;
+
+                        case ("6"):
                             break;
 
                         case ("0"):
