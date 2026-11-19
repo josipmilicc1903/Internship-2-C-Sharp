@@ -37,6 +37,7 @@ namespace Internship_2_C_Sharp
             borrowList.Add(6, ("The Brothers Karamazov", "Fjodor Dostojevski", DateOnly.FromDateTime(DateTime.Today.AddDays(-22)), null, 0, 0));
 
 
+
             void UpdateDataForUnReturnedBorrows()
             {
                 foreach (var (key, value) in borrowList)
@@ -136,10 +137,7 @@ namespace Internship_2_C_Sharp
             {
                 foreach (var borrow in borrows)
                 {
-                    string returnDate = borrow.returnDate?.ToString() ?? "Nije vraceno";
-                    Console.WriteLine($"{borrow.id} |  \"{borrow.bookTitle}\" - {borrow.author} | Posuđeno : {borrow.borrowDate} | " +
-                        $"Vračeno: {returnDate} | Kašnjenje : {borrow.overdueDays} | Zakasnina : {borrow.lateFee}");
-
+                    PrintBorrow(borrow.id, borrow.bookTitle,borrow.author, borrow.borrowDate, borrow.returnDate, borrow.overdueDays, borrow.lateFee);
                 }
             }
 
@@ -189,6 +187,40 @@ namespace Internship_2_C_Sharp
                 borrows.Sort((a, b) => b.lateFee.CompareTo(a.lateFee));
                 return borrows;
             }
+
+
+            List<String> ReturnBorrowMonths()
+            {
+                List<string> borrowMonths = new List<string>();
+
+                foreach (var (key,value) in borrowList)
+                {
+                    int flag = 0;
+                    foreach(var date in borrowMonths)
+                    {
+                        if (value.borrowDate.ToString("yyyy-MM") == date)
+                        {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    if (flag == 0)
+                    {
+                        borrowMonths.Add(value.borrowDate.ToString("yyyy-MM"));
+                    }
+                }
+                return borrowMonths;
+            }
+
+            void PrintBorrow(int id, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)
+            {
+                string strReturnDate = returnDate?.ToString() ?? "Nije vraceno";
+                Console.WriteLine($"{id} |  \"{bookTitle}\" - {author} | Posuđeno : {borrowDate} | " +
+                    $"Vračeno: {strReturnDate} | Kašnjenje : {overdueDays} | Zakasnina : {lateFee}");
+
+            }
+
+            
 
 
 
@@ -713,7 +745,7 @@ namespace Internship_2_C_Sharp
                 PrintBorrowList(borrows);
             }
 
-            void PrintBorrowByTitleOrAuthor()
+            void PrintBorrowsByTitleOrAuthor()
             {
                 var borrows = CreateBorrowTuple();
 
@@ -723,6 +755,30 @@ namespace Internship_2_C_Sharp
                 borrows.RemoveAll(borrow => borrow.bookTitle.ToLower() != input.Trim().ToLower() && borrow.author.ToLower() != input.Trim().ToLower());
 
                 PrintBorrowList(borrows);
+            }
+
+            void PrintBorrowsByDate()
+            {
+                var borrowMonths = ReturnBorrowMonths();
+                borrowMonths.Sort();
+                foreach (var month in borrowMonths)
+                {
+                    Console.WriteLine($"{month}\n");
+                    int borrowCount = 0;
+                    double lateFeeSum = 0;
+                    foreach (var (key, value) in borrowList)
+                    {
+                        if (value.borrowDate.ToString("yyyy-MM") == month)
+                        {
+                            borrowCount++;
+                            lateFeeSum = lateFeeSum + value.lateFee;
+                            PrintBorrow(key, value.bookTitle, value.author, value.borrowDate, value.returnDate, value.overdueDays, value.lateFee);
+                        }
+                    }
+                    Console.WriteLine($"Ukupno posudbi: {borrowCount} ");
+                    Console.WriteLine($"Ukupna zakasnina: {lateFeeSum}\n\n");
+
+                }
             }
 
             
@@ -773,10 +829,11 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("5"):
-                            PrintBorrowByTitleOrAuthor();
+                            PrintBorrowsByTitleOrAuthor();
                             break;
 
                         case ("6"):
+                            PrintBorrowsByDate();
                             break;
 
                         case ("0"):
