@@ -410,42 +410,31 @@ namespace Internship_2_C_Sharp
             {
                 Console.Write("\nUnesi Id korisnika kojeg želis izbrisati ili Q za izać: ");
                 string input = Console.ReadLine();
-                int selectedId;
 
                 if (input == "Q")
                 {
                     return;
                 }
 
+                (bool isTrue, int selectedId) = DoesUserExistById(input);
 
-                if (int.TryParse(input, out selectedId)) { }
-                else
+                if (isTrue)
                 {
-                    Console.WriteLine("Kriv unos, trebaš unijeti broj");
-                    Console.WriteLine("\n");
-                    return;
-                }
+                    if (HasNotReturned(selectedId))
+                    {
+                        Console.WriteLine("\nNemozes izbrisat korisnika koji ima nevracenu knjigu");
+                        return;
+                    }
 
-                if (!members.ContainsKey(selectedId))
-                {
-                    Console.WriteLine("Krivi unos, nepostoji id koji si unio");
-                    return;
+                    Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}");
+                    if (IsVerified("obrisat"))
+                    {
+                        members.Remove(selectedId);
+                        Console.WriteLine("\nKorisnik uspjesno izbrisan");
+                        return;
+                    }
+                    Console.WriteLine("\nBrisanje zaustavljeno");
                 }
-
-                if (HasNotReturned(selectedId))
-                {
-                    Console.WriteLine("\nNemozes izbrisat korisnika koji ima nevracenu knjigu");
-                    return;
-                }
-
-                Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}");
-                if (IsVerified("obrisat"))
-                {
-                    members.Remove(selectedId);
-                    Console.WriteLine("\nKorisnik uspjesno izbrisan");
-                    return;
-                }
-                Console.WriteLine("\nBrisanje zaustavljeno");
             }
 
             void DeleteMemberByName()
