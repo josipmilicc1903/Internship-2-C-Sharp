@@ -658,15 +658,11 @@ namespace Internship_2_C_Sharp
                 Console.Write("\nUnesi Id korisnika kojeg zelis uredit: ");
                 string inputId = Console.ReadLine();
 
-                if (int.TryParse(inputId, out int id))
+                (bool isTrue, int selectedId)=DoesUserExistById(inputId);
+                if (isTrue)
                 {
-                    if (members.ContainsKey(id))
-                    {
-                        EditMember(id);
-                    }
-                    return;
+                    EditMember(selectedId);
                 }
-                Console.WriteLine("\nKriv Unos, unesi broj");
             }
 
 
