@@ -391,7 +391,8 @@ namespace Internship_2_C_Sharp
                         returnedBooks++;
                     }
                 }
-                return sumDayReturned / returnedBooks;
+                return returnedBooks != 0 ? sumDayReturned / returnedBooks : 0;
+               
             }
 
 
@@ -1620,6 +1621,122 @@ namespace Internship_2_C_Sharp
 
 
 
+            void FindBiggestFeeMember()
+            {
+                int biggestFeeId = 1;
+                double biggestFee = 0;
+                foreach( var (key,value) in members)
+                {
+                    double tempTotalFee = CalculateUserTotalLateFee(key);
+                    if (tempTotalFee > biggestFee)
+                    {
+                        biggestFeeId = key;
+                        biggestFee = tempTotalFee;
+                    }
+                }
+                if(members.Count == 0)
+                {
+                    Console.WriteLine("Prazna lista članova, nemoze se izracunat");
+                    return;
+                }
+                Console.WriteLine($"\nČlan sa največom zakasninom je: {members[biggestFeeId].firstName} {members[biggestFeeId].lastName}");
+                Console.WriteLine($"Zakasnina je {biggestFee}");
+            }
+
+            void FindMostBorrowsMember()
+            {
+                int mostBorrowsId = 1;
+                double  mostBorrows= 0;
+                int flag = 0;
+                foreach (var (key, value) in members)
+                {
+                    double tempborrws = value.borrowList.Count;
+                    if (tempborrws > mostBorrows)
+                    {
+                        mostBorrowsId = key;
+                        mostBorrows = tempborrws;
+                        flag = 1;
+                    }
+                }
+                if (members.Count == 0)
+                {
+                    Console.WriteLine("Prazna lista članova, nemoze se izracunat\n");
+                    return;
+                }
+
+                if (flag == 0)
+                {
+                    Console.WriteLine("Nijedan ćlan  nema posudbu");
+                    return;
+                }
+                Console.WriteLine($"\nČlan sa najvise posudbi je: {members[mostBorrowsId].firstName} {members[mostBorrowsId].lastName}");
+                Console.WriteLine($"Broj posudbi je {mostBorrows}");
+            }
+
+
+            void PrintStatisticMenu()
+            {
+                while (true)
+                {
+                    string template = """
+
+                        STATISTIC MENU
+
+
+                        1 - Član s najvećom ukupnom zakasninom
+
+                        2 - Član s najviše posudbi
+
+                        3 - Najposuđivaniji naslov
+
+                        4 - Ukupan iznos zakasnina svih članova
+
+                        5 - Graf broja posudbi po mjesecu
+
+                        0 - Povratak na glavni izbornik
+                        
+                        """;
+
+                    string input = PrintTemplate(template);
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            FindBiggestFeeMember();
+                            break;
+
+                        case ("2"):
+                            FindMostBorrowsMember();
+                            break;
+
+                        case ("3"):
+
+                            break;
+
+                        case ("4"):
+
+                            break;
+
+                        case ("5"):
+
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
+
+
+                }
+            }
+
+
+
+
             void PrintMainMenu()
             {
                 UpdateBorrowData();
@@ -1631,6 +1748,8 @@ namespace Internship_2_C_Sharp
                         1 - Članovi
 
                         2 - Posudbe
+
+                        3 - Statistika
 
                         0 - Izlaz iz aplikacije
 
@@ -1646,6 +1765,10 @@ namespace Internship_2_C_Sharp
 
                         case ("2"):
                             PrintBorrowMenu();
+                            break;
+
+                        case ("3"):
+                            PrintStatisticMenu();
                             break;
 
                         case ("0"):
