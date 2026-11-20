@@ -38,23 +38,23 @@ namespace Internship_2_C_Sharp
 
 
 
-            void UpdateDataForUnReturnedBorrows()
+            void UpdateBorrowData()
             {
                 foreach (var (key, value) in borrowList)
                 {
-                    DateOnly todayDate = DateOnly.FromDateTime(DateTime.Today);
-                    if (value.returnDate == null)
-                    {
-                        int dayDifference = todayDate.DayNumber - value.borrowDate.DayNumber;
-                        if (dayDifference > 21)
-                        {
-                            int overdueDays = dayDifference - 21;
-                            double lateFee = overdueDays * 0.5;
-                            var touple = (value.bookTitle, value.author, value.borrowDate, value.returnDate, overdueDays, lateFee);
-                            borrowList[key] = touple;
+                    DateOnly calculationDate = value.returnDate != null
+                        ? value.returnDate.Value
+                        : DateOnly.FromDateTime(DateTime.Today);
 
-                        }
-                    }
+                    int dayDifference = calculationDate.DayNumber - value.borrowDate.DayNumber;
+
+                    int overdueDays = dayDifference > 21 ? dayDifference - 21 : 0;
+                    double lateFee = overdueDays * 0.5;
+
+                    var tuple = (value.bookTitle, value.author, value.borrowDate,
+                                 value.returnDate, overdueDays, lateFee);
+
+                    borrowList[key] = tuple;
                 }
             }
 
@@ -227,7 +227,7 @@ namespace Internship_2_C_Sharp
             {
                 string strReturnDate = returnDate?.ToString() ?? "Nije vraceno";
                 Console.WriteLine($"{id} |  \"{bookTitle}\" - {author} | Posuđeno : {borrowDate} | " +
-                    $"Vračeno: {strReturnDate} | Kašnjenje : {overdueDays} | Zakasnina : {lateFee}");
+                    $"Vračeno: {strReturnDate} | Kašnjenje : {overdueDays} | Zakasnina : {lateFee} E");
 
             }
 
@@ -1214,6 +1214,7 @@ namespace Internship_2_C_Sharp
 
                         case ("2"):
                             ReturnBorrow();
+                            UpdateBorrowData();
 
                             break;
 
@@ -1247,10 +1248,10 @@ namespace Internship_2_C_Sharp
 
             void PrintMainMenu()
             {
-                UpdateDataForUnReturnedBorrows();
+                UpdateBorrowData();
                 while (true)
                 {
-                    string template = """
+                     string template = """
                         APLIKACIJA ZA EVIDENCIJU POSUDBI
 
                         1 - Članovi
