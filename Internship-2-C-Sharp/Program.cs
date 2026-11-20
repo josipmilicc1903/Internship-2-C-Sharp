@@ -349,7 +349,9 @@ namespace Internship_2_C_Sharp
                 borrowList[selectedId] = borrowTuple;
             }
 
-            void CalculateUserTotalBorrows(int id)
+
+
+            (int bookSum,int unreturnedSum) CalculateUserTotalBorrows(int id)
             {
                 int bookSum = members[id].borrowList.Count;
                 int unreturnedSum = 0;
@@ -360,21 +362,25 @@ namespace Internship_2_C_Sharp
                         unreturnedSum++;
                     }
                 }
-                Console.WriteLine($"\nUkupan zbroj knjiga: {bookSum}, a broj nevracenih knjiga je: {unreturnedSum}");
+                return (bookSum,unreturnedSum);
             }
 
-            void CalculateUserTotalLateFee(int id)
+            double CalculateUserTotalLateFee(int id)
             {
                 double sum=0;
                 foreach(var borrow in members[id].borrowList)
                 {
                     sum = sum + borrowList[borrow].lateFee;
                 }
-                Console.WriteLine($"Ukupna zakasninia je: {sum}");
+                return sum;
             }
 
-            void CalculateAverageBorrowLenght(int id)
+            double CalculateAverageBorrowLenght(int id)
             {
+                if (members[id].borrowList.Count == 0)
+                {
+                    return 0;
+                }
                 double sumDayReturned = 0;
                 double returnedBooks = 0;
                 foreach (var borrow in members[id].borrowList)
@@ -385,14 +391,18 @@ namespace Internship_2_C_Sharp
                         returnedBooks++;
                     }
                 }
-                Console.WriteLine($"Prosjecno trajanje posudbe je: {sumDayReturned/returnedBooks}");
+                return sumDayReturned / returnedBooks;
             }
 
 
-            void CalculateBiggestOverdue(int id)
+            int CalculateBiggestOverdue(int id)
             {
+                if (members[id].borrowList.Count == 0)
+                {
+                    return 0;
+                }
                 var biggest = members[id].borrowList.MaxBy(x => borrowList[x].overdueDays);
-                Console.WriteLine($"Najvece kasnjenje je: {borrowList[biggest].overdueDays}");
+                return borrowList[biggest].overdueDays;
             }
 
 
@@ -1470,19 +1480,73 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void PrintReportMenu(int id)
+            {
+                while (true)
+                {
+                    string template = $"""
 
-            void PrintReport()
+                        REPORT MENU: {members[id].firstName}  {members[id].lastName}
+
+                        1 - Ukupan Broj posudbi i broj trenutno nevracenih knjiga
+
+                        2 - Ukupan broj zakasnina
+
+                        3 - Prosjecno trajanje posudbe
+
+                        4 - Posudba s najvecim kasnjenjem
+
+                        5 - Pregled posudbi u rasponu od - do
+
+                        0 - Povratak na glavni izbornik
+
+                        """;
+
+                    string input = PrintTemplate(template);
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            (int bookkSum, int unreturnedSum) = CalculateUserTotalBorrows(id);
+                            Console.WriteLine($"Ukupan broj posudbi je: {bookkSum}, broj nevracenih knjiga je: {unreturnedSum}");
+                            break;
+
+                        case ("2"):
+                            Console.WriteLine($"Ukupan zbroj zakasnina je: {CalculateUserTotalLateFee(id)}");
+                            break;
+
+                        case ("3"):
+                            Console.WriteLine($"Prosjenco trajanje posudbe po danima je: {CalculateAverageBorrowLenght(id)}");
+                            break;
+
+                        case ("4"):
+                            Console.WriteLine($"Posudba s najvecim kasnjenjem je: {CalculateBiggestOverdue(id)}");
+                            break;
+
+                        case ("5"):
+                            PrintBorrowsByDateRange(id);
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
+                }
+
+            }
+
+            void FindMemberId()
             {
                 Console.Write("Unesi Id korisnika za kojeg želiš izvještaj: ");
                 string inputId = Console.ReadLine();
 
                 (bool isTrue, int selectedId) = DoesUserExistById(inputId);
                 if (isTrue) {
-                    CalculateUserTotalBorrows(selectedId);
-                    CalculateUserTotalLateFee(selectedId);
-                    CalculateAverageBorrowLenght(selectedId);
-                    CalculateBiggestOverdue(selectedId);
-                    PrintBorrowsByDateRange(selectedId);
+                    PrintReportMenu(selectedId);
                 }
             }
 
@@ -1539,7 +1603,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("6"):
-                            PrintReport();
+                            FindMemberId();
                             break;
 
                         case ("0"):
