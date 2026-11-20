@@ -148,7 +148,7 @@ namespace Internship_2_C_Sharp
             {
                 foreach (var borrow in borrows)
                 {
-                    PrintBorrow(borrow.id, borrow.bookTitle,borrow.author, borrow.borrowDate, borrow.returnDate, borrow.overdueDays, borrow.lateFee);
+                    PrintBorrow(borrow.id, borrow.bookTitle, borrow.author, borrow.borrowDate, borrow.returnDate, borrow.overdueDays, borrow.lateFee);
                 }
             }
 
@@ -172,14 +172,14 @@ namespace Internship_2_C_Sharp
 
                 Console.Write("\nUlazno (odaberi 1) ili Silazno (odaberi drugi znak) sortiranje: ");
                 string inputSort = Console.ReadLine();
-                if(inputSort == "1")
+                if (inputSort == "1")
                 {
                     borrows.Sort((a, b) => a.borrowDate.CompareTo(b.borrowDate));
                     return borrows;
 
                 }
                 borrows.Sort((a, b) => b.borrowDate.CompareTo(a.borrowDate));
-                return borrows;            
+                return borrows;
             }
 
 
@@ -204,10 +204,10 @@ namespace Internship_2_C_Sharp
             {
                 List<string> borrowMonths = new List<string>();
 
-                foreach (var (key,value) in borrowList)
+                foreach (var (key, value) in borrowList)
                 {
                     int flag = 0;
-                    foreach(var date in borrowMonths)
+                    foreach (var date in borrowMonths)
                     {
                         if (value.borrowDate.ToString("yyyy-MM") == date)
                         {
@@ -231,7 +231,7 @@ namespace Internship_2_C_Sharp
 
             }
 
-            (bool isTrue,int selectedId) DoesUserExistById(string input)
+            (bool isTrue, int selectedId) DoesUserExistById(string input)
             {
                 int selectedId = 0;
                 if (int.TryParse(input, out selectedId)) { }
@@ -239,13 +239,13 @@ namespace Internship_2_C_Sharp
                 {
                     Console.WriteLine("Kriv unos, trebaš unijeti broj");
                     Console.WriteLine("\n");
-                    return (false,-1);
+                    return (false, -1);
                 }
 
                 if (!members.ContainsKey(selectedId))
                 {
                     Console.WriteLine("Krivi unos, nepostoji id koji si unio");
-                    return (false,-1);
+                    return (false, -1);
                 }
                 return (true, selectedId);
             }
@@ -278,6 +278,31 @@ namespace Internship_2_C_Sharp
                         value.borrowList.Remove(borrowId);
                     }
                 }
+            }
+
+            (bool isTrue,double lateFee) ReturnLateFee()
+            {
+                Console.Write("Unesi unos zakasnine za izbrisat posudbe ili Q za izac: ");
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "q")
+                {
+                    Console.WriteLine("\nBrisanje posudbe prekinuto");
+                    return (false,0);
+                }
+
+                double lateFee;
+                if (double.TryParse(input, out lateFee))
+                {
+                    if (lateFee >= 0)
+                    {
+                        return (true, lateFee);
+                    }
+                    Console.WriteLine("\nKriv unos, zabranjeno je unosit negativne brojeve");
+                    return (false, 0);
+                }
+                Console.WriteLine("\nKriv unos, potrebno je unijeti broj");
+                return (false, 0);
             }
 
 
@@ -699,7 +724,7 @@ namespace Internship_2_C_Sharp
                 Console.Write("\nUnesi Id korisnika kojeg zelis uredit: ");
                 string inputId = Console.ReadLine();
 
-                (bool isTrue, int selectedId)=DoesUserExistById(inputId);
+                (bool isTrue, int selectedId) = DoesUserExistById(inputId);
                 if (isTrue)
                 {
                     EditMember(selectedId);
@@ -822,7 +847,7 @@ namespace Internship_2_C_Sharp
                 }
             }
 
-            
+
 
 
             void ListBorrowMenu()
@@ -888,21 +913,21 @@ namespace Internship_2_C_Sharp
 
                 }
             }
-        
+
 
             void CreateNewBorrow()
             {
                 Console.Write("Unesi Id korisnika koji posuđuje: ");
                 string input = Console.ReadLine();
 
-                (bool isTrue,int selectedId)=DoesUserExistById(input);
+                (bool isTrue, int selectedId) = DoesUserExistById(input);
                 if (isTrue)
                 {
                     Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}\n");
                     Console.Write("Unesi naslov knjige ili Q za izac: ");
-                    string inputBookTitle=Console.ReadLine();
+                    string inputBookTitle = Console.ReadLine();
 
-                    if(inputBookTitle.ToLower() == "q")
+                    if (inputBookTitle.ToLower() == "q")
                     {
                         Console.WriteLine("\nKreiranje nove posudbe zaustavljeno");
                         return;
@@ -937,17 +962,17 @@ namespace Internship_2_C_Sharp
                 Console.Write("Unesi Id posudbe koju želiš izbrisat ili Q za izac: ");
                 string input = Console.ReadLine();
 
-                if(input.ToLower() == "q")
+                if (input.ToLower() == "q")
                 {
                     Console.WriteLine("Brisanje posudbe prekinuto");
                     return;
                 }
 
-                (bool isTrue,int selectedId) = DoesBorrowExistById(input);
+                (bool isTrue, int selectedId) = DoesBorrowExistById(input);
                 if (isTrue)
                 {
                     Console.WriteLine($"\n{borrowList[selectedId].bookTitle}\n");
-                    if (IsVerifiedBorrow("izbrisat")){
+                    if (IsVerifiedBorrow("izbrisat")) {
 
                         RemoveBorrowIdFromMember(selectedId);
                         borrowList.Remove(selectedId);
@@ -976,7 +1001,7 @@ namespace Internship_2_C_Sharp
                 {
                     Console.WriteLine($"\n{members[selectedId].firstName} {members[selectedId].lastName}\n");
 
-                    if (IsVerifiedBorrow("izbrisat"))
+                    if (IsVerifiedBorrow("izbrisat"))//malo uredit ovu funkciju prevelika je
                     {
                         int flag = 0;
                         for (int i = members[selectedId].borrowList.Count - 1; i >= 0; i--)
@@ -997,6 +1022,34 @@ namespace Internship_2_C_Sharp
                     Console.WriteLine("Brisanje zaustavljeno");
                 }
 
+            }
+
+            void DeleteBorrowsByFee()
+            {
+                (bool isTrue, double lateFee) = ReturnLateFee();
+                if (isTrue)
+                {
+                    if (IsVerifiedBorrow("izbrisat"))
+                    {
+                        int flag = 0;
+                        foreach (var (key, value) in members)
+                        {
+                            for (int i = value.borrowList.Count - 1; i >= 0; i--)
+                            {
+                                if (borrowList[value.borrowList[i]].lateFee > lateFee)
+                                {
+                                    borrowList.Remove(value.borrowList[i]);
+                                    value.borrowList.RemoveAt(i);
+                                    flag++;
+                                }
+                            }
+                        }
+                        string izlaz = flag == 0 ? "\nNema se šta za obrisat\n" : "\nBrisanje uspjesno obavljeno\n";
+                        Console.WriteLine(izlaz);
+                        return;
+                    }
+                    Console.WriteLine("Brisanje zaustavljeno");
+                }
             }
 
 
@@ -1031,6 +1084,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            DeleteBorrowsByFee();
                             break;
 
                         case ("0"):
