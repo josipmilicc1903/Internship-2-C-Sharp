@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Internship_2_C_Sharp
 {
@@ -347,7 +349,107 @@ namespace Internship_2_C_Sharp
                 borrowList[selectedId] = borrowTuple;
             }
 
-            
+            void CalculateUserTotalBorrows(int id)
+            {
+                int bookSum = members[id].borrowList.Count;
+                int unreturnedSum = 0;
+                foreach(var borrow in members[id].borrowList)
+                {
+                    if (borrowList[borrow].returnDate == null)
+                    {
+                        unreturnedSum++;
+                    }
+                }
+                Console.WriteLine($"\nUkupan zbroj knjiga: {bookSum}, a broj nevracenih knjiga je: {unreturnedSum}");
+            }
+
+            void CalculateUserTotalLateFee(int id)
+            {
+                double sum=0;
+                foreach(var borrow in members[id].borrowList)
+                {
+                    sum = sum + borrowList[borrow].lateFee;
+                }
+                Console.WriteLine($"Ukupna zakasninia je: {sum}");
+            }
+
+            void CalculateAverageBorrowLenght(int id)
+            {
+                double sumDayReturned = 0;
+                double returnedBooks = 0;
+                foreach (var borrow in members[id].borrowList)
+                {
+                    if (borrowList[borrow].returnDate != null)
+                    {
+                        sumDayReturned = sumDayReturned + (borrowList[borrow].returnDate.Value.DayNumber - borrowList[borrow].borrowDate.DayNumber);
+                        returnedBooks++;
+                    }
+                }
+                Console.WriteLine($"Prosjecno trajanje posudbe je: {sumDayReturned/returnedBooks}");
+            }
+
+
+            void CalculateBiggestOverdue(int id)
+            {
+                var biggest = members[id].borrowList.MaxBy(x => borrowList[x].overdueDays);
+                Console.WriteLine($"Najvece kasnjenje je: {borrowList[biggest].overdueDays}");
+            }
+
+
+            void PrintBorrowsByDateRange(int id)
+            {
+                Console.WriteLine("\nUnesi raspon datuma za povijest posudbi ili Q za izac: ");
+                string inputDate1 = Console.ReadLine();
+                if(inputDate1.ToLower() == "q")
+                {
+                    return;
+                }
+                string inputDate2 = Console.ReadLine();
+                Console.WriteLine("\n");
+
+                if (DateOnly.TryParse(inputDate1, out DateOnly date1))
+                {
+                    if (DateOnly.TryParse(inputDate2, out DateOnly date2))
+                    {
+                        if (date1 > date2)
+                        {
+                            Console.WriteLine("Neispravan raspon datuma");
+                            return;
+                        }
+
+                        foreach (var borrow in members[id].borrowList)
+                        {
+                            if (borrowList[borrow].borrowDate.DayNumber >= date1.DayNumber &&
+                                borrowList[borrow].borrowDate.DayNumber <= date2.DayNumber)
+                            {
+                                Console.WriteLine($"Posuđena knjiga Id-a {borrow} datum posudbe: {borrowList[borrow].borrowDate}");
+                            }
+
+                            if (borrowList[borrow].returnDate != null)
+                            {
+                                if (borrowList[borrow].returnDate.Value.DayNumber >= date1.DayNumber &&
+                                    borrowList[borrow].returnDate.Value.DayNumber <= date2.DayNumber)
+                                {
+                                    Console.WriteLine($"Vračena knjiga Id-a {borrow} datum povrata: {borrowList[borrow].returnDate}");
+                                }
+                            }
+                        }
+                        return;
+                    }
+                }
+
+                Console.WriteLine("Kriv format datuma");
+            }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1252,7 +1354,7 @@ namespace Internship_2_C_Sharp
 
             void EditReturnDate(int id)
             {
-                Console.Write("Promjeni datum vracanja: ");
+                Console.Write("Promjeni datum vracanja ili upisi (prazno) ako zelis maknut datum vracanja: ");
                 string inputDate = Console.ReadLine();
 
                 if (DateOnly.TryParse(inputDate, out DateOnly returnDate))
@@ -1272,6 +1374,23 @@ namespace Internship_2_C_Sharp
                         return;
                     }
                     return;
+                }
+                else
+                {
+                    if(inputDate.ToLower() == "prazno")
+                    {
+                        if (IsVerified("uredit"))
+                        {
+                            DateOnly? date = null;
+                            var tuple = (borrowList[id].bookTitle, borrowList[id].author, borrowList[id].borrowDate, date,
+                                    borrowList[id].overdueDays, borrowList[id].lateFee);
+                            borrowList[id] = tuple;
+                            Console.WriteLine("\nUređivanje uspjesno\n");
+                            return;
+                        }
+                        Console.WriteLine("\nUređivanje prekinuto\n");
+                        return;
+                    }
                 }
                 Console.WriteLine("\nKriv format datuma\n");
             }
@@ -1352,6 +1471,21 @@ namespace Internship_2_C_Sharp
 
 
 
+            void PrintReport()
+            {
+                Console.Write("Unesi Id korisnika za kojeg želiš izvještaj: ");
+                string inputId = Console.ReadLine();
+
+                (bool isTrue, int selectedId) = DoesUserExistById(inputId);
+                if (isTrue) {
+                    CalculateUserTotalBorrows(selectedId);
+                    CalculateUserTotalLateFee(selectedId);
+                    CalculateAverageBorrowLenght(selectedId);
+                    CalculateBiggestOverdue(selectedId);
+                    PrintBorrowsByDateRange(selectedId);
+                }
+            }
+
 
 
             void PrintBorrowMenu()
@@ -1405,6 +1539,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("6"):
+                            PrintReport();
                             break;
 
                         case ("0"):
