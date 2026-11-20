@@ -1167,6 +1167,9 @@ namespace Internship_2_C_Sharp
 
 
 
+
+
+
             void EditAuthor(int id)
             {
                 Console.Write("Promjeni ime autora: ");
@@ -1179,6 +1182,7 @@ namespace Internship_2_C_Sharp
                         var tuple = (borrowList[id].bookTitle, inputAuthor, borrowList[id].borrowDate, borrowList[id].returnDate,
                             borrowList[id].overdueDays, borrowList[id].lateFee);
                         borrowList[id] = tuple;
+                        Console.WriteLine("\nUređivanje uspjesno\n");
                         return;
                     }
                     Console.WriteLine("\nUređivanje prekinuto");
@@ -1200,6 +1204,7 @@ namespace Internship_2_C_Sharp
                         var tuple = (inputAuthor, borrowList[id].author, borrowList[id].borrowDate, borrowList[id].returnDate,
                             borrowList[id].overdueDays, borrowList[id].lateFee);
                         borrowList[id] = tuple;
+                        Console.WriteLine("\nUređivanje uspjesno\n");
                         return;
                     }
                     Console.WriteLine("\nUređivanje prekinuto");
@@ -1207,6 +1212,42 @@ namespace Internship_2_C_Sharp
                 }
                 Console.WriteLine("\nKriv unos, nesmije biti prazan strign");
             }
+
+
+
+            void EditBorrowDate(int id)
+            {
+                Console.Write("Promjeni datum posudbe: ");
+                string inputDate = Console.ReadLine();
+
+                if(DateOnly.TryParse(inputDate,out DateOnly borrowDate)){
+                    if (IsValidDate(borrowDate)) {
+                        if (borrowList[id].returnDate != null)
+                        {
+                            if(borrowDate > borrowList[id].returnDate)
+                            {
+                                Console.WriteLine("\nGreska, nemoze biti datum posudbe noviji od datuma vracanja");
+                                return;
+                            }
+                        }
+                        if (IsVerifiedBorrow("uredit"))
+                        {
+                            var tuple = (borrowList[id].bookTitle, borrowList[id].author, borrowDate, borrowList[id].returnDate,
+                                borrowList[id].overdueDays, borrowList[id].lateFee);
+                            borrowList[id] = tuple;
+                            Console.WriteLine("\nUređivanje uspjesno\n");
+                            return;
+
+                        }
+                        Console.WriteLine("\nUređivanje prekinuto\n");
+                        return;
+                    }
+                    return;
+                }
+                Console.WriteLine("\nKriv format datuma\n");
+            }
+
+
 
 
 
@@ -1259,6 +1300,8 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
+                            EditBorrowDate(id);
+                            UpdateBorrowData();
                             break;
 
                         case ("4"):
