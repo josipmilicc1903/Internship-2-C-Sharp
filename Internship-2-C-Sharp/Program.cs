@@ -389,22 +389,19 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
-                if (birthDate > DateOnly.FromDateTime(DateTime.Today))
+                if (IsValidDate(birthDate))
                 {
-                    Console.WriteLine("\nGreska, datum uneseni nemoze bit u buducnosti");
-                    return;
-
+                    if (IsVerified("kreirati"))
+                    {
+                        members.Add(membersNextId, (creationData.inputFirstName.Trim(), creationData.inputLastName.Trim(), birthDate, new List<int>()));
+                        membersNextId++;
+                        Console.WriteLine("\nKorisnik uspješno kreiran");
+                        return;
+                     
+                    }
+                    Console.WriteLine("\nKreiranje zaustavljeno");
+                  
                 }
-
-                if (IsVerified("kreirati"))
-                {
-                    members.Add(membersNextId, (creationData.inputFirstName.Trim(), creationData.inputLastName.Trim(), birthDate, new List<int>()));
-                    membersNextId++;
-                    Console.WriteLine("\nKorisnik uspješno kreiran");
-                    return;
-
-                }
-                Console.WriteLine("\nKreiranje zaustavljeno");
             }
 
 
@@ -701,20 +698,15 @@ namespace Internship_2_C_Sharp
                     return;
                 }
 
-                if (birthDate > DateOnly.FromDateTime(DateTime.Now))
-                {
-                    Console.WriteLine("\nGreska, datum nemoze biti u buducnosti");
-                    return;
+                if (IsValidDate(birthDate)) {
+                    if (IsVerified("uredit"))
+                    {
+                        members[id] = (members[id].firstName, members[id].lastName, birthDate, members[id].borrowList);
+                        Console.WriteLine("\nUređivanje uspjesno");
+                        return;
+                    }
+                    Console.WriteLine("\nUredivanje prekinuto");
                 }
-
-                if (IsVerified("uredit"))
-                {
-                    members[id] = (members[id].firstName, members[id].lastName, birthDate, members[id].borrowList);
-                    Console.WriteLine("\nUređivanje uspjesno");
-                    return;
-                }
-                Console.WriteLine("\nUredivanje prekinuto");
-
             }
 
 
