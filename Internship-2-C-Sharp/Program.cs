@@ -307,7 +307,7 @@ namespace Internship_2_C_Sharp
 
             (bool hasContinue, string input) ReturnInputId(string action)
             {
-                Console.Write($"Unesi Id posudbe koju želiš {action} ili Q za izac: ");
+                Console.Write($"\nUnesi Id posudbe koju želiš {action} ili Q za izac: ");
                 string input = Console.ReadLine();
 
                 if (input.ToLower() == "q")
@@ -403,13 +403,6 @@ namespace Internship_2_C_Sharp
                   
                 }
             }
-
-
-
-
-
-
-
 
 
             void ListAllMembersSorted()
@@ -1172,6 +1165,121 @@ namespace Internship_2_C_Sharp
             }
 
 
+
+
+            void EditAuthor(int id)
+            {
+                Console.Write("Promjeni ime autora: ");
+                string inputAuthor=Console.ReadLine();
+                
+                if(inputAuthor.Length != 0)
+                {
+                    if (IsVerifiedBorrow("uredit")) 
+                    {
+                        var tuple = (borrowList[id].bookTitle, inputAuthor, borrowList[id].borrowDate, borrowList[id].returnDate,
+                            borrowList[id].overdueDays, borrowList[id].lateFee);
+                        borrowList[id] = tuple;
+                        return;
+                    }
+                    Console.WriteLine("\nUređivanje prekinuto");
+                    return;
+                }
+                Console.WriteLine("\nKriv unos, nesmije biti prazan strign");
+            }
+
+
+            void EditTitle(int id)
+            {
+                Console.Write("Promjeni ime naslova: ");
+                string inputAuthor = Console.ReadLine();
+
+                if (inputAuthor.Length != 0)
+                {
+                    if (IsVerifiedBorrow("uredit"))
+                    {
+                        var tuple = (inputAuthor, borrowList[id].author, borrowList[id].borrowDate, borrowList[id].returnDate,
+                            borrowList[id].overdueDays, borrowList[id].lateFee);
+                        borrowList[id] = tuple;
+                        return;
+                    }
+                    Console.WriteLine("\nUređivanje prekinuto");
+                    return;
+                }
+                Console.WriteLine("\nKriv unos, nesmije biti prazan strign");
+            }
+
+
+
+
+            void EditBorrowById()
+            {
+                (bool hasContinue, string inputId) = ReturnInputId("uredit");
+                if (hasContinue)
+                {
+                    (bool isTrue, int selectedId) = DoesBorrowExistById(inputId);
+                    if (isTrue)
+                    {
+                        EditBorrowMenu(selectedId);
+                    }
+                }
+            }
+
+
+
+            void EditBorrowMenu(int id)
+            {
+                while (true)
+                {
+                    string template = $"""
+
+                        Uredivanje posudbe: {borrowList[id].bookTitle}   {borrowList[id].author} 
+
+                        1 - Uredi naslov
+
+                        2 - Uredi autora
+
+                        3 - Uredi datum posudbe
+
+                        4 - Uredi datum vracanja
+
+                        0 - Povratak na Borrow Menu
+
+                        """;
+
+                    string input = PrintTemplate(template);
+
+                    switch (input)
+                    {
+                        case ("1"):
+                            EditTitle(id);
+                            break;
+
+                        case ("2"):
+                            EditAuthor(id);
+                            break;
+
+                        case ("3"):
+                            break;
+
+                        case ("4"):
+                            break;
+
+                        case ("0"):
+                            return;
+
+                        default:
+                            Console.WriteLine("Unesen krivi znak");
+                            break;
+                    }
+                    Console.WriteLine("\n\n\n");
+                } 
+
+            }
+
+
+
+
+
             void PrintBorrowMenu()
             {
                 while (true)
@@ -1215,6 +1323,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
+                            EditBorrowById();
                             break;
 
                         case ("5"):
