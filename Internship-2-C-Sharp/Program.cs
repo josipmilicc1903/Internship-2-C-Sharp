@@ -1090,11 +1090,16 @@ namespace Internship_2_C_Sharp
 
                     if (inputBookTitle.Length != 0 && inputBookAuthor.Length != 0)
                     {
-                        borrowList.Add(borrowListNextId, (inputBookTitle.Trim(), inputBookAuthor.Trim(), DateOnly.FromDateTime(DateTime.Today), null, 0, 0));
-                        members[selectedId].borrowList.Add(borrowListNextId);
-                        borrowListNextId++;
+                        if (IsVerifiedBorrow("kreirat"))
+                        {
+                            borrowList.Add(borrowListNextId, (inputBookTitle.Trim(), inputBookAuthor.Trim(), DateOnly.FromDateTime(DateTime.Today), null, 0, 0));
+                            members[selectedId].borrowList.Add(borrowListNextId);
+                            borrowListNextId++;
 
-                        Console.WriteLine($"\nPosudba uspjesno kreirana, treba biti vracena do: {DateOnly.FromDateTime(DateTime.Today.AddDays(21))}\n");
+                            Console.WriteLine($"\nPosudba uspjesno kreirana, treba biti vracena do: {DateOnly.FromDateTime(DateTime.Today.AddDays(21))}\n");
+                            return;
+                        }
+                        Console.WriteLine("\nPosudba zaustavljena");
                         return;
 
                     }
@@ -1703,6 +1708,20 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void CalculateTotalLateFee()
+            {
+                double sum = 0;
+                foreach(var (key,value) in members)
+                {
+                    sum = sum + CalculateUserTotalLateFee(key);
+                }
+
+                Console.WriteLine($"\nUkupan iznos zakasnina svih članova je: {sum}\n");
+            }
+
+
+
+
             void PrintStatisticMenu()
             {
                 while (true)
@@ -1743,7 +1762,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
-
+                            CalculateTotalLateFee();
                             break;
 
                         case ("5"):
