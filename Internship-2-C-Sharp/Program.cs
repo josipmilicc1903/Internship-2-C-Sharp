@@ -1370,7 +1370,7 @@ namespace Internship_2_C_Sharp
 
             void EditReturnDate(int id)
             {
-                Console.Write("Promjeni datum vracanja ili upisi (prazno) ako zelis maknut datum vracanja: ");
+                Console.Write("Promjeni datum vracanja ili upisi (\"prazno\") ako zelis maknut datum vracanja: ");
                 string inputDate = Console.ReadLine();
 
                 if (DateOnly.TryParse(inputDate, out DateOnly returnDate))
@@ -1720,6 +1720,34 @@ namespace Internship_2_C_Sharp
             }
 
 
+            void PrintGraphBorrow()
+            {
+                Dictionary<String,int> dateDict = new Dictionary<String,int>();
+
+                foreach(var (key,value) in borrowList)
+                {
+                    string tempValue = value.borrowDate.ToString("yyyy-MM");
+                    if (!dateDict.ContainsKey(tempValue))
+                    {
+                        dateDict[tempValue] = 1;
+                        continue;
+                    }
+                    dateDict[tempValue]++;
+
+                }
+                foreach(var (key,value) in dateDict)
+                {
+                    Console.Write($"{key} ");
+                    Console.Write($"{dateDict[key]} ");
+                    for(int i=0; i < dateDict[key]; i++)
+                    {
+                        Console.Write("*");
+                    }
+                    Console.WriteLine("\n");
+                }
+            }
+
+
 
 
             void PrintStatisticMenu()
@@ -1766,7 +1794,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("5"):
-
+                            PrintGraphBorrow();
                             break;
 
                         case ("0"):
