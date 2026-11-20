@@ -305,6 +305,54 @@ namespace Internship_2_C_Sharp
                 return (false, 0);
             }
 
+            (bool hasContinue, string input) ReturnInputId(string action)
+            {
+                Console.Write($"Unesi Id posudbe koju želiš {action} ili Q za izac: ");
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "q")
+                {
+                    Console.WriteLine("\nBrisanje posudbe prekinuto");
+                    return (false, "");
+                }
+                return (true, input);
+            }
+
+            bool IsValidDate(DateOnly date,DateOnly? borrowDate = null)
+            {
+                if (date > DateOnly.FromDateTime(DateTime.Today))
+                {
+                    Console.WriteLine("\nGreska, datum nemoze bit u buducnosti");
+                    return false;
+
+
+                }
+                if (borrowDate != null)
+                {
+                    if (date < borrowDate)
+                    {
+                        if (date < borrowDate)
+                        {
+                            Console.WriteLine("\nGreska, datum vracanja nemore biti prije datuma posudbe");
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            void EditBorrow(int selectedId, string bookTitle, string author, DateOnly borrowDate, DateOnly? returnDate, int overdueDays, double lateFee)
+            {
+                var borrowTuple = (bookTitle, author, borrowDate, returnDate, overdueDays, lateFee);
+                borrowList[selectedId] = borrowTuple;
+            }
+
+            
+
+
+
+
+
 
 
 
@@ -343,7 +391,7 @@ namespace Internship_2_C_Sharp
 
                 if (birthDate > DateOnly.FromDateTime(DateTime.Today))
                 {
-                    Console.WriteLine("\nGreska, datum rodenja nemoze bit u buducnosti");
+                    Console.WriteLine("\nGreska, datum uneseni nemoze bit u buducnosti");
                     return;
 
                 }
@@ -1098,6 +1146,38 @@ namespace Internship_2_C_Sharp
                 }
             }
 
+            void ReturnBorrow()
+            {
+                (bool hasContinue, string input) = ReturnInputId("vratit");
+                if (hasContinue)
+                {
+                    (bool isTrue, int selectedId) = DoesBorrowExistById(input);
+                    if (isTrue)
+                    {
+                        if (borrowList[selectedId].returnDate == null)
+                        {
+                            Console.WriteLine($"\n {borrowList[selectedId].bookTitle}\n");
+                            Console.Write("Unesi datum vracanja: ");
+                            string inputDate = Console.ReadLine();
+
+                            DateOnly returnDate;
+                            if (DateOnly.TryParse(inputDate, out returnDate))
+                            {
+                                if (IsValidDate(returnDate, borrowList[selectedId].borrowDate))
+                                {
+                                    EditBorrow(selectedId, borrowList[selectedId].bookTitle, borrowList[selectedId].author,
+                                        borrowList[selectedId].borrowDate, returnDate, borrowList[selectedId].overdueDays, borrowList[selectedId].lateFee);
+                                    
+                                }
+                                return;
+                            }
+                            Console.WriteLine("\nGreska, kriv format datuma");
+                            return;
+                        }
+                        Console.WriteLine("Greska, knjiga je vec vracena");
+                    }
+                }
+            }
 
 
             void PrintBorrowMenu()
@@ -1133,6 +1213,8 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("2"):
+                            ReturnBorrow();
+
                             break;
 
                         case ("3"):
