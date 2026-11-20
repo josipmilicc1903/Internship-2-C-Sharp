@@ -1090,7 +1090,7 @@ namespace Internship_2_C_Sharp
 
                     if (inputBookTitle.Length != 0 && inputBookAuthor.Length != 0)
                     {
-                        borrowList.Add(borrowListNextId, (inputBookTitle, inputBookAuthor, DateOnly.FromDateTime(DateTime.Today), null, 0, 0));
+                        borrowList.Add(borrowListNextId, (inputBookTitle.Trim(), inputBookAuthor.Trim(), DateOnly.FromDateTime(DateTime.Today), null, 0, 0));
                         members[selectedId].borrowList.Add(borrowListNextId);
                         borrowListNextId++;
 
@@ -1624,7 +1624,7 @@ namespace Internship_2_C_Sharp
             void FindBiggestFeeMember()
             {
                 int biggestFeeId = 1;
-                double biggestFee = 0;
+                double biggestFee = -1;
                 foreach( var (key,value) in members)
                 {
                     double tempTotalFee = CalculateUserTotalLateFee(key);
@@ -1673,6 +1673,35 @@ namespace Internship_2_C_Sharp
                 Console.WriteLine($"Broj posudbi je {mostBorrows}");
             }
 
+            void PrintMostBorrowedBook()
+            {
+                if(borrowList.Count == 0)
+                {
+                    Console.WriteLine("Lista posudbi je prazna");
+                    return;
+                }
+
+                int mostBorrowedCount = -1;
+                string mostBorrowedTitle = "";
+                foreach(var (key,value) in borrowList)
+                {
+                    int tempBorrowedCount = 0;
+                    foreach(var (key1,value1) in borrowList)
+                    {
+                        if(value.bookTitle == value1.bookTitle)
+                        {
+                            tempBorrowedCount++;
+                        }
+                    }
+                    if(tempBorrowedCount > mostBorrowedCount)
+                    {
+                        mostBorrowedCount = tempBorrowedCount;
+                        mostBorrowedTitle = value.bookTitle;
+                    }
+                }
+                Console.WriteLine($"\nNajposuđivanija knjiga je: {mostBorrowedTitle}, broj posudbi: {mostBorrowedCount}");
+            }
+
 
             void PrintStatisticMenu()
             {
@@ -1710,7 +1739,7 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("3"):
-
+                            PrintMostBorrowedBook();
                             break;
 
                         case ("4"):
