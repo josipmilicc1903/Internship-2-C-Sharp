@@ -1250,6 +1250,35 @@ namespace Internship_2_C_Sharp
 
 
 
+            void EditReturnDate(int id)
+            {
+                Console.Write("Promjeni datum vracanja: ");
+                string inputDate = Console.ReadLine();
+
+                if (DateOnly.TryParse(inputDate, out DateOnly returnDate))
+                {
+                    if (IsValidDate(returnDate, borrowList[id].borrowDate))
+                    {
+                        if (IsVerifiedBorrow("uredit"))
+                        {
+                            var tuple = (borrowList[id].bookTitle, borrowList[id].author, borrowList[id].borrowDate, returnDate,
+                                borrowList[id].overdueDays, borrowList[id].lateFee);
+                            borrowList[id] = tuple;
+                            Console.WriteLine("\nUređivanje uspjesno\n");
+                            return;
+
+                        }
+                        Console.WriteLine("\nUređivanje prekinuto\n");
+                        return;
+                    }
+                    return;
+                }
+                Console.WriteLine("\nKriv format datuma\n");
+            }
+
+
+
+
 
 
             void EditBorrowById()
@@ -1305,6 +1334,8 @@ namespace Internship_2_C_Sharp
                             break;
 
                         case ("4"):
+                            EditReturnDate(id);
+                            UpdateBorrowData();
                             break;
 
                         case ("0"):
