@@ -1263,14 +1263,19 @@ namespace Internship_2_C_Sharp
                             Console.Write("Unesi datum vracanja: ");
                             string inputDate = Console.ReadLine();
 
-                            DateOnly returnDate;
+                            DateOnly returnDate; 
                             if (DateOnly.TryParse(inputDate, out returnDate))
                             {
                                 if (IsValidDate(returnDate, borrowList[selectedId].borrowDate))
                                 {
                                     EditBorrow(selectedId, borrowList[selectedId].bookTitle, borrowList[selectedId].author,
                                         borrowList[selectedId].borrowDate, returnDate, borrowList[selectedId].overdueDays, borrowList[selectedId].lateFee);
-                                    
+
+                                    UpdateBorrowData();
+                                    Console.WriteLine("\nKnjiga je vračena");
+                                    Console.WriteLine($"Kasnjenje je: {borrowList[selectedId].overdueDays}");
+                                    Console.WriteLine($"Zakasnina je: {borrowList[selectedId].lateFee}");
+                                   
                                 }
                                 return;
                             }
